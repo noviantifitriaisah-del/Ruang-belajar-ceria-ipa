@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ruang Belajar Ceria — Sistem Organ Tubuh Manusia (IPAS Kelas 5)</title>
+<meta name="description" content="Media pembelajaran interaktif IPAS Kelas 5: sistem pernapasan, pencernaan, dan peredaran darah manusia. Dilengkapi dashboard guru, kuis, dan progres belajar." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23FFD93D'/%3E%3Ccircle cx='35' cy='42' r='7' fill='%23333'/%3E%3Ccircle cx='65' cy='42' r='7' fill='%23333'/%3E%3Cpath d='M32 62 q18 20 36 0' stroke='%23333' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --pink:#FF6B9D; --pink-soft:#FFE1EC;
+    --yellow:#FFD93D; --yellow-soft:#FFF4C2;
+    --green:#5FD068; --green-soft:#DFF7E0;
+    --blue:#4D96FF; --blue-soft:#DBE9FF;
+    --purple:#A66CFF; --purple-soft:#EEE3FF;
+    --orange:#FF9F45; --orange-soft:#FFEAD4;
+    --teal:#20C4C4; --teal-soft:#D7F7F7;
+    --ink:#2B2140; --ink-soft:#5B4B73;
+    --paper:#FFFBF3; --card:#FFFFFF;
+    --ring:rgba(43,33,64,.10);
+    --shadow:0 10px 24px rgba(43,33,64,.10), 0 2px 0 rgba(43,33,64,.04);
+    --shadow-lg:0 18px 40px rgba(43,33,64,.16);
+    --radius:24px; --radius-sm:16px;
+    --nav-h:72px;
+    --ff: "Baloo 2", "Trebuchet MS", "Comic Sans MS", ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--ff); color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased; line-height:1.6; overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 12% 8%, #FFF0C9 0 22%, transparent 23%),
+      radial-gradient(circle at 88% 12%, #E4F0FF 0 18%, transparent 19%),
+      radial-gradient(circle at 78% 92%, #FFE6F0 0 16%, transparent 17%),
+      radial-gradient(circle at 6% 88%, #E3FBEB 0 18%, transparent 19%);
+    background-attachment:fixed;
+  }
+  img,svg{max-width:100%}
+  button{font-family:inherit; cursor:pointer}
+  h1,h2,h3,h4{margin:0 0 .4em; line-height:1.18; letter-spacing:-.01em}
+  h1{font-size:clamp(1.9rem,4.6vw,3.1rem)}
+  h2{font-size:clamp(1.35rem,2.7vw,2.05rem)}
+  h3{font-size:clamp(1.05rem,2vw,1.35rem)}
+  p{margin:0 0 .8em}
+  a{color:var(--blue)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  :focus-visible{outline:3px dashed var(--purple); outline-offset:3px; border-radius:10px}
+
+  /* ============ LAYOUT ============ */
+  .wrap{width:min(1180px,100% - 2rem);margin-inline:auto}
+  section.screen{display:none; padding:calc(var(--nav-h) + 18px) 0 90px; animation:screenIn .38s ease both}
+  section.screen.active{display:block}
+  @keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .stack{display:grid;gap:18px}
+  .grid{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .grid-2{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .center{text-align:center}
+  .mt{margin-top:18px} .mt-s{margin-top:10px}
+  .hide{display:none !important}
+
+  /* ============ NAVBAR ============ */
+  .navbar{
+    position:fixed; inset:0 0 auto 0; height:var(--nav-h); z-index:60;
+    background:rgba(255,251,243,.92); backdrop-filter:blur(10px);
+    border-bottom:3px solid #FFE9B8;
+  }
+  .navbar .wrap{height:100%; display:flex; align-items:center; gap:14px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:0 0 auto}
+  .brand .logo{width:44px;height:44px;flex:0 0 auto; animation:bob 3.4s ease-in-out infinite}
+  .brand b{font-size:1.02rem; display:block; line-height:1.1}
+  .brand small{font-size:.68rem; color:var(--ink-soft); letter-spacing:.04em; text-transform:uppercase}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
+  .navlinks{display:flex; gap:6px; margin-left:auto; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none}
+  .navlinks::-webkit-scrollbar{display:none}
+  @media(max-width:720px){ .navlinks{mask-image:linear-gradient(90deg,#000 82%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent 100%)} }
+  .navbtn{
+    border:0; background:transparent; color:var(--ink-soft); font-weight:700; font-size:.92rem;
+    padding:9px 14px; border-radius:999px; white-space:nowrap; transition:.18s;
+  }
+  .navbtn:hover{background:var(--yellow-soft); color:var(--ink)}
+  .navbtn.active{background:var(--ink); color:#fff; box-shadow:0 4px 0 rgba(43,33,64,.25)}
+  .navbtn .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:6px;vertical-align:middle}
+  .who{
+    display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:999px;
+    background:#fff;border:2px solid #FFE9B8;font-size:.82rem;font-weight:700;flex:0 0 auto;
+  }
+  .who .ava{width:28px;height:28px;border-radius:50%;background:var(--purple-soft);display:grid;place-items:center;font-size:.95rem}
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    --bg:var(--blue); --fg:#fff; --sh:rgba(77,150,255,.45);
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    border:0;border-radius:999px;background:var(--bg);color:var(--fg);
+    font-weight:800;font-size:.98rem;padding:13px 24px;text-decoration:none;
+    box-shadow:0 5px 0 var(--sh); transition:transform .12s ease, box-shadow .12s ease, filter .18s;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 7px 0 var(--sh); filter:saturate(1.06)}
+  .btn:active{transform:translateY(3px); box-shadow:0 2px 0 var(--sh)}
+  .btn.pink{--bg:var(--pink);--sh:rgba(255,107,157,.45)}
+  .btn.green{--bg:var(--green);--sh:rgba(95,208,104,.45)}
+  .btn.yellow{--bg:var(--yellow);--fg:#4A3B00;--sh:rgba(255,217,61,.6)}
+  .btn.purple{--bg:var(--purple);--sh:rgba(166,108,255,.45)}
+  .btn.orange{--bg:var(--orange);--sh:rgba(255,159,69,.45)}
+  .btn.ghost{--bg:#fff;--fg:var(--ink);--sh:rgba(43,33,64,.14);border:2px solid #EEE6F7}
+  .btn.sm{padding:9px 16px;font-size:.86rem;box-shadow:0 4px 0 var(--sh)}
+  .btn.tiny{padding:6px 12px;font-size:.78rem;box-shadow:0 3px 0 var(--sh)}
+  .btn[disabled]{opacity:.55;pointer-events:none}
+  .btn.block{width:100%}
+
+  /* ============ CARDS & CHIPS ============ */
+  .card{
+    background:var(--card); border-radius:var(--radius); padding:clamp(16px,2.4vw,26px);
+    box-shadow:var(--shadow); border:3px solid #fff; position:relative;
+  }
+  .card.tinted{border-color:var(--tint,var(--yellow-soft)); background:linear-gradient(180deg,#fff, #fff)}
+  .card.pop:hover{transform:translateY(-4px); box-shadow:var(--shadow-lg)}
+  .card.pop{transition:.2s}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;background:var(--yellow-soft);color:#6B5300;
+    border-radius:999px;padding:5px 13px;font-size:.76rem;font-weight:800;white-space:nowrap;
+  }
+  .chip.blue{background:var(--blue-soft);color:#14468C}
+  .chip.pink{background:var(--pink-soft);color:#A61C4C}
+  .chip.green{background:var(--green-soft);color:#1F6B27}
+  .chip.purple{background:var(--purple-soft);color:#5A2AA8}
+  .chip.teal{background:var(--teal-soft);color:#0A6A6A}
+  .chip.orange{background:var(--orange-soft);color:#93490A}
+  .eyebrow{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--purple)}
+  .muted{color:var(--ink-soft)}
+  .small{font-size:.86rem}
+  .divider{height:3px;border-radius:99px;background:repeating-linear-gradient(90deg,#FFE9B8 0 12px,transparent 12px 22px);margin:16px 0}
+  ul.clean{list-style:none;padding:0;margin:0}
+  ul.clean li{padding:7px 0 7px 30px;position:relative}
+  ul.clean li::before{content:"";position:absolute;left:6px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--dotc,var(--green))}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; border-radius:32px; overflow:hidden; padding:clamp(22px,4vw,44px);
+    background:linear-gradient(135deg,#FFF1F6 0%,#FFF8DE 45%,#E7F3FF 100%);
+    border:4px solid #fff; box-shadow:var(--shadow-lg);
+    display:grid; grid-template-columns:1.15fr .85fr; gap:20px; align-items:center;
+  }
+  @media(max-width:820px){ .hero{grid-template-columns:1fr; text-align:center} .hero .row{justify-content:center} .hero .hero-kid{max-width:230px;order:-1} }
+  .hero h1 span{color:var(--pink)}
+  .hero .hero-kid{justify-self:center; width:100%; max-width:300px; animation:float 4.5s ease-in-out infinite;
+    background:radial-gradient(circle at 50% 46%, #FFF 0 58%, rgba(255,255,255,0) 72%); border-radius:50%}
+  .hero .hero-kid svg{display:block;width:100%;height:auto}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .hero .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.55;pointer-events:none}
+  .b1{width:120px;height:120px;background:#FFD93D;top:-40px;right:28%;animation:float 6s ease-in-out infinite}
+  .b2{width:80px;height:80px;background:#A66CFF;bottom:-24px;left:42%;animation:float 7s ease-in-out infinite reverse}
+  .b3{width:56px;height:56px;background:#5FD068;top:14%;left:44%;opacity:.35;animation:float 5s ease-in-out infinite}
+  .fact{
+    display:flex; gap:12px; align-items:flex-start; background:#fff; border-radius:var(--radius-sm);
+    padding:12px 14px; border:2px dashed #FFD93D; font-size:.9rem;
+  }
+
+  /* ============ SYSTEM CARDS ============ */
+  .syscard{
+    border-radius:26px; padding:20px; background:#fff; border:3px solid var(--sc,#FFE9B8);
+    box-shadow:var(--shadow); text-align:left; width:100%; display:grid; gap:8px;
+    transition:transform .18s, box-shadow .18s; position:relative; overflow:hidden;
+  }
+  .syscard:hover{transform:translateY(-6px) rotate(-.4deg); box-shadow:var(--shadow-lg)}
+  .syscard .ico{width:78px;height:78px;display:grid;place-items:center}
+  .syscard .ico svg{display:block;width:100%;height:auto}
+  .syscard .arrow{position:absolute;right:16px;bottom:14px;font-size:1.2rem;opacity:.45}
+  .syscard .bar{height:8px;border-radius:99px;background:#F1ECF7;overflow:hidden}
+  .syscard .bar>i{display:block;height:100%;background:var(--sc2,var(--green));border-radius:99px;transition:width .5s}
+
+  /* ============ TABS ============ */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px}
+  .tab{
+    border:2px solid #EEE6F7;background:#fff;border-radius:999px;padding:10px 18px;font-weight:800;
+    color:var(--ink-soft); font-size:.9rem; display:flex; align-items:center;gap:8px; transition:.16s;
+  }
+  .tab:hover{border-color:var(--purple);color:var(--ink)}
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tab .num{width:20px;height:20px;border-radius:50%;background:var(--purple-soft);color:#5A2AA8;display:grid;place-items:center;font-size:.72rem}
+
+  /* ============ ORGAN / ACCORDION ============ */
+  .organ{border:2px solid #F2ECFA;border-radius:18px;overflow:hidden;background:#fff;margin-bottom:10px}
+  .organ>button{
+    width:100%;display:flex;align-items:center;gap:12px;background:#fff;border:0;padding:12px 14px;
+    font-weight:800;font-size:.98rem;color:var(--ink);text-align:left;
+  }
+  .organ>button:hover{background:#FFFBEE}
+  .organ .oglyph{width:40px;height:40px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;background:var(--oph,var(--yellow-soft));font-size:1.25rem}
+  .organ .caret{margin-left:auto;transition:.25s;color:var(--ink-soft)}
+  .organ.open .caret{transform:rotate(180deg)}
+  .organ .obody{display:none;padding:0 16px 14px 66px;font-size:.93rem;color:var(--ink-soft)}
+  .organ.open .obody{display:block;animation:screenIn .25s ease both}
+  .organ .obody b{color:var(--ink)}
+
+  /* ============ QUIZ ============ */
+  .qwrap{max-width:820px;margin-inline:auto}
+  .qbar{height:14px;border-radius:99px;background:#F1ECF7;overflow:hidden;margin-bottom:6px}
+  .qbar>i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--green),var(--teal));transition:width .4s}
+  .opt{
+    display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:#fff;
+    border:3px solid #EFE9F8; border-radius:18px;padding:14px 16px;font-size:.98rem;font-weight:700;
+    color:var(--ink); margin-bottom:10px; transition:.15s;
+  }
+  .opt:hover:not([disabled]){border-color:var(--purple);transform:translateY(-2px);background:#FBF7FF}
+  .opt .k{width:30px;height:30px;flex:0 0 auto;border-radius:50%;background:var(--purple-soft);color:#5A2AA8;display:grid;place-items:center;font-weight:900;font-size:.85rem}
+  .opt.correct{border-color:var(--green);background:#EDFBF0;animation:pop .35s ease both}
+  .opt.correct .k{background:var(--green);color:#fff}
+  .opt.wrong{border-color:#F2545B;background:#FFF0F1;animation:shake .38s ease both}
+  .opt.wrong .k{background:#F2545B;color:#fff}
+  .opt[disabled]{cursor:default;opacity:1}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.035)}100%{transform:scale(1)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}75%{transform:translateX(-4px)}}
+  .feedback{border-radius:18px;padding:14px 16px;font-size:.93rem;margin-top:6px;display:flex;gap:12px;align-items:flex-start}
+  .feedback.ok{background:#EDFBF0;border:2px solid #B9EFC3}
+  .feedback.no{background:#FFF0F1;border:2px solid #FFC9CC}
+  .feedback .big{font-size:1.5rem;line-height:1}
+
+  /* ============ PROGRESS / RINGS ============ */
+  .ring{--p:0;width:132px;height:132px;flex:0 0 auto;position:relative;display:grid;place-items:center}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;font-weight:900;font-size:1.25rem}
+  .statbox{display:flex;gap:16px;align-items:center;background:#fff;border-radius:22px;padding:16px;border:3px solid #F3EDFB;box-shadow:var(--shadow)}
+  .badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+  .badge{
+    background:#fff;border-radius:18px;padding:14px 10px;text-align:center;border:3px solid #F3EDFB;
+    font-size:.76rem;font-weight:800;color:var(--ink-soft);filter:grayscale(1);opacity:.5;transition:.2s;
+  }
+  .badge.on{filter:none;opacity:1;border-color:var(--yellow);box-shadow:0 8px 18px rgba(255,217,61,.3);transform:rotate(-1.5deg)}
+  .badge .em{font-size:1.9rem;display:block;line-height:1.2}
+  .art svg{display:block;width:100%;height:auto}
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:2px dotted #EFE9F8;font-size:.9rem}
+  .kv:last-child{border-bottom:0}
+  .kv b{font-weight:900}
+
+  /* ============ TABLE ============ */
+  .tablewrap{overflow-x:auto;border-radius:16px;border:2px solid #F1ECF7}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;background:#fff;min-width:520px}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #F4EFFA}
+  th{background:#FBF7FF;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+  tbody tr:hover{background:#FFFCF3}
+
+  /* ============ FORMS ============ */
+  label.fl{display:block;font-size:.8rem;font-weight:900;color:var(--ink-soft);margin:0 0 5px;letter-spacing:.02em}
+  input[type=text],input[type=number],input[type=password],textarea,select{
+    width:100%;font-family:inherit;font-size:.93rem;color:var(--ink);background:#FDFBFF;
+    border:2px solid #E9E2F5;border-radius:14px;padding:10px 13px;transition:.16s;
+  }
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--purple);background:#fff;box-shadow:0 0 0 4px rgba(166,108,255,.14)}
+  textarea{min-height:80px;resize:vertical;line-height:1.5}
+  .field{margin-bottom:12px}
+  .hint{font-size:.76rem;color:var(--ink-soft);margin-top:4px}
+
+  /* ============ MODAL ============ */
+  dialog{
+    border:0;border-radius:26px;padding:0;max-width:520px;width:calc(100% - 2rem);
+    box-shadow:0 30px 70px rgba(43,33,64,.3); background:transparent;
+  }
+  dialog::backdrop{background:rgba(43,33,64,.45); backdrop-filter:blur(3px)}
+  dialog .inner{background:#fff;border-radius:26px;padding:26px;border:4px solid #fff}
+  .modalhead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .modalhead .em{font-size:1.8rem}
+
+  /* ============ TOAST ============ */
+  #toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:200;display:grid;gap:8px;width:min(420px,calc(100% - 2rem))}
+  .toast{
+    background:var(--ink);color:#fff;border-radius:16px;padding:12px 16px;font-size:.88rem;font-weight:700;
+    box-shadow:var(--shadow-lg); display:flex; gap:10px; align-items:center; animation:toastIn .3s ease both;
+  }
+  .toast.ok{background:#1F8A46} .toast.err{background:#C0392B}
+  @keyframes toastIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+  .toast.out{animation:toastOut .25s ease forwards}
+  @keyframes toastOut{to{opacity:0;transform:translateY(12px) scale(.96)}}
+
+  /* ============ MISC ============ */
+  .note{
+    background:#FFF8E1;border-left:6px solid var(--yellow);border-radius:12px;padding:12px 14px;
+    font-size:.86rem;color:#6B5300;
+  }
+  .note.blue{background:#EFF6FF;border-color:var(--blue);color:#14468C}
+  .note.pink{background:#FFF1F6;border-color:var(--pink);color:#A61C4C}
+  .note.green{background:#F1FCF3;border-color:var(--green);color:#1F6B27}
+  .pulse-heart{animation:beat 1.6s ease-in-out infinite; transform-origin:center}
+  @keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.09)}24%{transform:scale(1)}36%{transform:scale(1.06)}48%{transform:scale(1)}}
+  .breathe{animation:breathe 4s ease-in-out infinite; transform-origin:center}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .sway{animation:sway 4s ease-in-out infinite; transform-origin:bottom center}
+  @keyframes sway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
+  .delay1{animation-delay:.5s} .delay2{animation-delay:1.1s}
+  .stepnum{width:30px;height:30px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-weight:900;font-size:.85rem;flex:0 0 auto}
+  .steps{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  .steps li{display:flex;gap:12px;align-items:flex-start;font-size:.92rem}
+  .checkline{display:flex;gap:12px;align-items:flex-start;background:#fff;border:3px solid #F1ECF7;border-radius:18px;padding:12px 14px;margin-bottom:10px}
+  .checkline .cbox{width:26px;height:26px;flex:0 0 auto;border-radius:9px;border:3px solid #D9CFEC;display:grid;place-items:center;background:#fff;font-size:.9rem;color:#fff}
+  .checkline.done{border-color:var(--green);background:#F6FEF7}
+  .checkline.done .cbox{background:var(--green);border-color:var(--green)}
+  .checkline .txt{font-size:.94rem}
+  .footer{padding:30px 0 40px;text-align:center;color:var(--ink-soft);font-size:.82rem}
+  .footer b{color:var(--ink)}
+  .fab{
+    position:fixed;right:16px;bottom:16px;z-index:50;border-radius:999px;width:56px;height:56px;
+    display:grid;place-items:center;font-size:1.4rem;background:var(--yellow);border:3px solid #fff;
+    box-shadow:var(--shadow-lg); color:#4A3B00;
+  }
+  .banner{
+    background:#FFF0F1;border:2px solid #FFC9CC;color:#A61C4C;border-radius:14px;padding:10px 14px;
+    font-size:.82rem;font-weight:700;margin:12px auto 0; width:min(1180px,100% - 2rem);
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important}
+  }
+  @media(max-width:720px){
+    :root{--nav-h:106px}
+    .navbar .wrap{flex-wrap:wrap;gap:4px;align-content:center;padding-top:6px}
+    .brand{flex:1 1 auto}
+    .brand b{font-size:.95rem}
+    .who{order:2}
+    .navlinks{order:3;flex:0 0 100%;margin:0 0 6px;gap:4px}
+    .navbtn{padding:6px 11px;font-size:.83rem}
+  }
+  @media(max-width:640px){
+    .brand small{display:none}
+    .who span{display:none}
+    .ring{width:110px;height:110px}
+    .organ .obody{padding-left:18px}
+    section.screen{padding-top:calc(var(--nav-h) + 10px)}
+  }
+  @media print{ .navbar,.fab,#toasts,.btn{display:none !important} section.screen{display:block !important;padding-top:0} }
+</style>
+</head>
+<body>
+<div id="storageWarn" class="banner hide">⚠️ Mode terbatas: browser memblokir penyimpanan (localStorage). Data &amp; progres hanya bertahan selama halaman ini terbuka. Buka file lewat browser biasa (bukan mode privat) agar tersimpan.</div>
+
+<header class="navbar">
+  <div class="wrap">
+    <a class="brand" href="#" data-go="home" aria-label="Ruang Belajar Ceria - beranda">
+      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="48" r="30" fill="#FFD93D"/>
+        <circle cx="50" cy="50" r="38" fill="none" stroke="#FF9F45" stroke-width="4" stroke-dasharray="6 8"/>
+        <circle cx="40" cy="42" r="4.6" fill="#2B2140"/><circle cx="60" cy="42" r="4.6" fill="#2B2140"/>
+        <path d="M38 58q12 12 24 0" stroke="#2B2140" stroke-width="4.6" fill="none" stroke-linecap="round"/>
+        <circle cx="30" cy="52" r="4" fill="#FF6B9D" opacity=".7"/><circle cx="70" cy="52" r="4" fill="#FF6B9D" opacity=".7"/>
+      </svg>
+      <span><b>Ruang Belajar Ceria</b><small>IPAS Kelas 5 · Fase C</small></span>
+    </a>
+    <nav class="navlinks" id="navLinks" aria-label="Navigasi utama"></nav>
+    <div class="who" id="whoBox" title="Profil siswa">
+      <span class="ava" id="whoAva">🙂</span><span id="whoName">Tamu</span>
+    </div>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ======================= BERANDA ======================= -->
+  <section class="screen active" id="screen-home">
+    <div class="wrap">
+      <div class="hero">
+        <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+        <div>
+          <span class="chip pink" id="homeChipMateri">📚 IPAS · Sistem Organ Tubuh Manusia</span>
+          <h1 style="margin-top:12px">Ayo Jelajahi <span>Tubuh Kita</span>! 🫀</h1>
+          <p class="muted" id="homeSapaan">Halo, teman! Belajar sistem pernapasan, pencernaan, dan peredaran darah dengan cara yang menyenangkan.</p>
+          <div class="row">
+            <button class="btn green" data-go="materi">🚀 Mulai Belajar</button>
+            <button class="btn yellow" data-go="kuis">🎯 Coba Kuis</button>
+            <button class="btn ghost" data-go="guru">🧑‍🏫 Dashboard Guru</button>
+          </div>
+          <div class="row mt" style="gap:8px">
+            <span class="chip green">✅ Nilai kuis otomatis</span>
+            <span class="chip blue">📈 Progres tersimpan</span>
+            <span class="chip purple">📱 Responsif</span>
+          </div>
+        </div>
+        <div class="hero-kid">
+          <!-- Ilustrasi kartun: anak + organ -->
+          <svg viewBox="0 0 320 340" role="img" aria-label="Ilustrasi kartun anak SD dikelilingi ikon paru-paru, lambung, dan jantung">
+            <ellipse cx="160" cy="318" rx="112" ry="16" fill="#2B2140" opacity=".08"/>
+            <!-- badan -->
+            <path d="M160 176c-46 0-70 26-76 66-3 18-4 34-4 46h160c0-12-1-28-4-46-6-40-30-66-76-66z" fill="#4D96FF"/>
+            <path d="M160 176c-18 0-30 4-40 11l40 78 40-78c-10-7-22-11-40-11z" fill="#FFFFFF" opacity=".92"/>
+            <circle cx="160" cy="240" r="9" fill="#FFD93D"/>
+            <!-- tangan melambai -->
+            <path d="M92 214c-16 8-26 26-24 44" stroke="#FFD3B0" stroke-width="17" stroke-linecap="round" fill="none"/>
+            <circle cx="66" cy="262" r="13" fill="#FFD3B0"/>
+            <path d="M228 214c16 8 26 26 24 44" stroke="#FFD3B0" stroke-width="17" stroke-linecap="round" fill="none"/>
+            <circle cx="254" cy="262" r="13" fill="#FFD3B0"/>
+            <!-- kepala -->
+            <circle cx="160" cy="118" r="60" fill="#FFD3B0"/>
+            <path d="M100 108c2-38 30-58 60-58s58 20 60 58c-12-14-26-20-38-16-10 3-16 10-22 10s-12-7-22-10c-12-4-26 2-38 16z" fill="#3A2A1E"/>
+            <circle cx="140" cy="118" r="6.5" fill="#2B2140"/><circle cx="180" cy="118" r="6.5" fill="#2B2140"/>
+            <circle cx="142.5" cy="115.5" r="2.2" fill="#fff"/><circle cx="182.5" cy="115.5" r="2.2" fill="#fff"/>
+            <circle cx="124" cy="134" r="8" fill="#FF9DB8" opacity=".55"/><circle cx="196" cy="134" r="8" fill="#FF9DB8" opacity=".55"/>
+            <path d="M146 140q14 16 28 0" stroke="#2B2140" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <!-- ikon melayang -->
+            <g class="float" transform="translate(12,120)">
+              <circle cx="26" cy="26" r="26" fill="#fff" stroke="#FFD93D" stroke-width="4"/>
+              <path d="M26 14v10M18 18c-6 4-6 12 0 16 4 3 6 6 8 10 2-4 4-7 8-10 6-4 6-12 0-16" stroke="#4D96FF" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(246,42)">
+              <circle cx="26" cy="26" r="26" fill="#fff" stroke="#FF6B9D" stroke-width="4"/>
+              <path class="pulse-heart" d="M26 38s-12-7-12-15a7 7 0 0 1 12-4 7 7 0 0 1 12 4c0 8-12 15-12 15z" fill="#FF6B9D"/>
+            </g>
+            <g transform="translate(238,150)">
+              <circle cx="26" cy="26" r="26" fill="#fff" stroke="#5FD068" stroke-width="4"/>
+              <path d="M18 16h12c2 0 3 2 2 4l-3 4c4 2 5 6 4 10-1 3-4 5-9 5h-6z" fill="#5FD068"/>
+            </g>
+            <g transform="translate(18,36)">
+              <circle cx="20" cy="20" r="20" fill="#fff" stroke="#A66CFF" stroke-width="4"/>
+              <path d="M14 26c0-3 3-5 6-5s6 2 6 5M20 12a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" stroke="#A66CFF" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid mt" id="homeSystems"></div>
+
+      <div class="grid-2 mt">
+        <div class="card">
+          <span class="eyebrow">🎯 Tujuan Pembelajaran</span>
+          <h2 id="homeTujuanJudul">Setelah belajar, aku bisa…</h2>
+          <ul class="clean" id="homeTujuan" style="--dotc:var(--pink)"></ul>
+          <button class="btn ghost sm mt-s" data-go="materi">Lihat Materi Lengkap →</button>
+        </div>
+        <div class="card" style="background:linear-gradient(160deg,#F7F1FF,#fff)">
+          <span class="eyebrow">📈 Progresku</span>
+          <h2 id="homeProgJudul">Terus semangat!</h2>
+          <div class="row" style="gap:20px">
+            <div class="ring" id="homeRing"></div>
+            <div style="flex:1;min-width:170px" id="homeProgList"></div>
+          </div>
+          <div class="row mt-s">
+            <button class="btn purple sm" data-go="progres">Buka Halaman Progres</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt" style="background:linear-gradient(120deg,#E9FBF0,#FFF9E6)">
+        <div class="row" style="justify-content:space-between">
+          <div>
+            <span class="eyebrow">🔗 Bagikan ke Siswa</span>
+            <h3 style="margin-bottom:4px">Bagikan tautan pembelajaran</h3>
+            <p class="small muted" style="margin:0">Guru dapat membuat tautan khusus berisi nama kelas &amp; materi pilihan. Atur di Dashboard Guru.</p>
+          </div>
+          <button class="btn green" id="homeShareBtn">🔗 Buat Link Berbagi</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= MATERI ======================= -->
+  <section class="screen" id="screen-materi">
+    <div class="wrap">
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <span class="eyebrow">📚 Materi Pembelajaran</span>
+          <h1 style="margin-bottom:6px" id="materiJudul">Sistem Organ Tubuh Manusia</h1>
+          <p class="muted" style="margin:0" id="materiSub">Pilih bab di bawah, lalu baca pelan-pelan. Klik setiap organ untuk melihat fungsinya!</p>
+        </div>
+        <span class="chip teal" id="materiChip">IPAS · Kelas 5</span>
+      </div>
+
+      <div class="tabs mt" id="materiTabs" role="tablist"></div>
+      <div id="materiPanel"></div>
+
+      <div class="card mt" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between;background:linear-gradient(120deg,#FFF6DB,#FFF)">
+        <div>
+          <b>Sudah selesai membaca bab ini?</b>
+          <div class="small muted">Tandai selesai agar progresmu bertambah.</div>
+        </div>
+        <div class="row">
+          <button class="btn green sm" id="btnTandaiBab">✅ Tandai Selesai</button>
+          <button class="btn yellow sm" data-go="kuis">🎯 Latihan Kuis</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= KUIS ======================= -->
+  <section class="screen" id="screen-kuis">
+    <div class="wrap qwrap" id="kuisArea"></div>
+  </section>
+
+  <!-- ======================= AKTIVITAS ======================= -->
+  <section class="screen" id="screen-aktivitas">
+    <div class="wrap">
+      <span class="eyebrow">🧪 Kegiatan Pembelajaran</span>
+      <h1 style="margin-bottom:6px">Ayo Lakukan Bersama!</h1>
+      <p class="muted">Kegiatan seru untuk membuktikan cara kerja organ tubuhmu. Centang setelah selesai.</p>
+      <div class="grid mt" id="aktivitasGrid"></div>
+
+      <div class="card mt" style="background:linear-gradient(150deg,#EFF6FF,#fff)">
+        <span class="eyebrow">⏱️ Alat Bantu Hitung</span>
+        <h3>Penghitung Napas &amp; Denyut Nadi</h3>
+        <p class="small muted">Gunakan saat istirahat dan setelah berlari di tempat. Bandingkan hasilnya!</p>
+        <div class="grid">
+          <div>
+            <div class="row" style="justify-content:space-between"><b>Napas (30 detik)</b><span class="chip blue" id="napasVal">0</span></div>
+            <div class="row mt-s">
+              <button class="btn blue sm" data-counter="napas">Tambah Napas</button>
+              <button class="btn ghost tiny" data-reset="napas">Reset</button>
+            </div>
+            <div class="hint">Hitungan per menit ≈ <b id="napasMenit">0</b></div>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between"><b>Denyut nadi (30 detik)</b><span class="chip pink" id="nadiVal">0</span></div>
+            <div class="row mt-s">
+              <button class="btn pink sm" data-counter="nadi">Tambah Denyut</button>
+              <button class="btn ghost tiny" data-reset="nadi">Reset</button>
+            </div>
+            <div class="hint">Hitungan per menit ≈ <b id="nadiMenit">0</b></div>
+          </div>
+          <div>
+            <div class="row" style="justify-content:space-between"><b>Detak timer 30 detik</b><span class="chip green" id="timerVal">30</span></div>
+            <button class="btn green sm mt-s" id="timerBtn">▶️ Mulai Timer</button>
+            <div class="hint">Timer hanya untuk membantu menghitung; hitungan tetap kamu yang menekan.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PROGRES ======================= -->
+  <section class="screen" id="screen-progres">
+    <div class="wrap">
+      <span class="eyebrow">📈 Progres Belajar</span>
+      <h1 style="margin-bottom:6px" id="progJudul">Ini Perjalananmu!</h1>
+      <p class="muted">Semua data tersimpan di perangkat ini (localStorage) tanpa server.</p>
+      <div id="progresArea" class="mt"></div>
+    </div>
+  </section>
+
+  <!-- ======================= DASHBOARD GURU ======================= -->
+  <section class="screen" id="screen-guru">
+    <div class="wrap">
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <span class="eyebrow">🧑‍🏫 Dashboard Guru</span>
+          <h1 style="margin-bottom:6px">Kelola Pembelajaran</h1>
+          <p class="muted" style="margin:0">Ubah identitas, tujuan, materi, dan soal. Siswa otomatis melihat versi terbaru.</p>
+        </div>
+        <span class="chip" id="guruStatus">✏️ Mode Edit</span>
+      </div>
+
+      <!-- Gerbang sandi -->
+      <div class="card mt" id="gateCard">
+        <div class="row" style="gap:16px;align-items:center">
+          <div style="font-size:2.2rem">🔐</div>
+          <div style="flex:1;min-width:220px">
+            <h3 style="margin-bottom:4px">Masuk sebagai guru</h3>
+            <p class="small muted" style="margin:0">Sandi awal: <b>guru123</b> (bisa diganti di tab Keamanan). Ini bukan keamanan tingkat server — hanya pembatas agar siswa tidak mengubah konten.</p>
+          </div>
+        </div>
+        <div class="row mt-s">
+          <input type="password" id="gatePass" placeholder="Masukkan sandi guru" style="max-width:260px" autocomplete="current-password" />
+          <button class="btn purple" id="gateBtn">Masuk</button>
+          <span class="small muted" id="gateMsg"></span>
+        </div>
+      </div>
+
+      <div id="guruArea" class="hide">
+        <div class="tabs mt" id="guruTabs"></div>
+        <div id="guruPanel"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="fab" id="fabSound" title="Suara efek: nyala" aria-label="Atur suara efek">🔔</button>
+<div id="toasts" aria-live="polite"></div>
+
+<!-- Modal umum -->
+<dialog id="modal">
+  <div class="inner">
+    <div class="modalhead"><span class="em" id="modalEm">💡</span><h3 id="modalTitle" style="margin:0">Judul</h3></div>
+    <div id="modalBody"></div>
+    <div class="row mt" id="modalActions" style="justify-content:flex-end"></div>
+  </div>
+</dialog>
+
+<footer class="footer">
+  <div class="wrap">
+    <b>Ruang Belajar Ceria</b> · Media pembelajaran interaktif IPAS Kelas 5 (Fase C) — Sistem Organ Tubuh Manusia<br>
+    <span class="small">Data tersimpan lokal di browser. Dibuat untuk pendampingan guru, bukan pengganti Buku Siswa.</span>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   RUANG BELAJAR CERIA — media pembelajaran IPAS Kelas 5 (Fase C)
+   Arsitektur: vanilla JS, tanpa dependensi. Data disimpan di localStorage.
+   Semua fitur di bawah ini benar-benar berjalan di browser.
+   ===================================================================== */
+(function(){
+"use strict";
+
+/* ---------------------------- 1. UTIL ---------------------------- */
+const $  = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const esc = (s='') => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = (p='id') => p + '_' + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-3);
+/* clone dalam: pakai structuredClone bila ada, jika tidak JSON (data murni JSON) */
+const clone = o => (typeof structuredClone === 'function') ? structuredClone(o) : JSON.parse(JSON.stringify(o));
+const clamp = (n,a,b) => Math.max(a, Math.min(b, n));
+const nowISO = () => new Date().toISOString();
+const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); } catch(e){ return '-'; } };
+const fmtDateTime = iso => { try { return new Date(iso).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}); } catch(e){ return '-'; } };
+const pct = (a,b) => b ? Math.round(a/b*100) : 0;
+
+function toast(msg, kind=''){
+  const box = $('#toasts');
+  const el = document.createElement('div');
+  el.className = 'toast ' + kind;
+  el.innerHTML = `<span>${kind==='ok'?'✅':kind==='err'?'⚠️':'💡'}</span><span>${esc(msg)}</span>`;
+  box.appendChild(el);
+  setTimeout(()=>{ el.classList.add('out'); setTimeout(()=>el.remove(), 260); }, 3000);
+}
+
+/* Suara efek kecil (WebAudio, tanpa file audio) */
+const Sfx = {
+  on: true,
+  ctx: null,
+  beep(freq=760, dur=.09, type='sine', gain=.05, delay=0){
+    if(!this.on) return;
+    try{
+      this.ctx = this.ctx || new (window.AudioContext||window.webkitAudioContext)();
+      const t = this.ctx.currentTime + delay;
+      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + .012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g); g.connect(this.ctx.destination);
+      o.start(t); o.stop(t + dur + .02);
+    }catch(e){ /* audio diblokir browser: abaikan */ }
+  },
+  click(){ this.beep(620,.06,'triangle',.04); },
+  ok(){ this.beep(720,.1,'sine',.06); this.beep(980,.12,'sine',.05,.1); },
+  no(){ this.beep(300,.14,'sawtooth',.045); this.beep(220,.16,'sawtooth',.04,.13); },
+  win(){ [660,830,990,1240].forEach((f,i)=>this.beep(f,.13,'sine',.05,i*.11)); }
+};
+
+/* ---------------------- 2. DATA BAWAAN (BISA DIEDIT) ---------------------- */
+const COLORS = {
+  napas:{key:'blue',  tint:'#DBE9FF', accent:'#4D96FF', chip:'blue',  emoji:'🫁'},
+  cerna:{key:'green', tint:'#DFF7E0', accent:'#5FD068', chip:'green', emoji:'🍎'},
+  darah:{key:'pink',  tint:'#FFE1EC', accent:'#FF6B9D', chip:'pink',  emoji:'❤️'}
+};
+
+const DEFAULT_DATA = {
+  meta: {
+    namaSitus: 'Ruang Belajar Ceria',
+    sekolah: 'SD Negeri Harapan Bangsa',
+    guru: 'Ibu Sari Wulandari, S.Pd.',
+    mapel: 'IPAS',
+    kelas: '5',
+    fase: 'C',
+    materi: 'Sistem Organ Tubuh Manusia',
+    sapaan: 'Halo, teman! Belajar sistem pernapasan, pencernaan, dan peredaran darah dengan cara yang menyenangkan.'
+  },
+  tujuan: [
+    'Mengidentifikasi organ penyusun sistem pernapasan, pencernaan, dan peredaran darah beserta fungsinya.',
+    'Menjelaskan proses kerja ketiga sistem organ tersebut.',
+    'Menghubungkan gangguan kesehatan dengan sistem organ yang terganggu.',
+    'Menerapkan perilaku hidup sehat untuk menjaga organ tubuh.'
+  ],
+  sistem: {
+    napas: {
+      nama: 'Sistem Pernapasan', emoji: '🫁',
+      fungsi: 'Memasukkan oksigen (O₂) ke dalam tubuh dan mengeluarkan karbon dioksida (CO₂) serta uap air.',
+      organ: [
+        {nama:'Hidung', fungsi:'Jalan masuk udara. Rambut hidung dan lendir menyaring debu, lalu udara dihangatkan dan dilembapkan.'},
+        {nama:'Faring (tekak)', fungsi:'Persimpangan jalan udara dan makanan.'},
+        {nama:'Laring (pangkal tenggorokan)', fungsi:'Tempat pita suara. Epiglotis menutup saat menelan agar makanan tidak masuk saluran napas.'},
+        {nama:'Trakea (batang tenggorok)', fungsi:'Saluran udara berbentuk cincin tulang rawan.'},
+        {nama:'Bronkus & bronchiolus', fungsi:'Cabang trakea menuju paru-paru kanan dan kiri.'},
+        {nama:'Paru-paru', fungsi:'Tempat pertukaran gas. Di dalamnya ada alveolus, kantung udara kecil berdinding tipis yang dikelilingi pembuluh kapiler.'},
+        {nama:'Diafragma', fungsi:'Otot di bawah paru-paru yang membantu bernapas.'}
+      ],
+      proses: [
+        'Inspirasi (menarik napas): diafragma dan otot antartulang rusuk berkontraksi, rongga dada membesar, tekanan udara di paru-paru turun, lalu udara masuk.',
+        'Ekspirasi (mengembuskan napas): otot-otot mengendur, rongga dada mengecil, lalu udara terdorong keluar.',
+        'Pertukaran gas di alveolus: O₂ berpindah ke darah dan CO₂ dari darah berpindah ke alveolus untuk dikeluarkan.'
+      ],
+      gangguan: ['Flu dan pilek','Asma','Bronkitis','Pneumonia (radang paru-paru)','TBC','Gangguan akibat asap rokok dan polusi udara'],
+      jaga: ['Menghirup udara bersih','Memakai masker saat berdebu','Tidak merokok dan menjauhi asap rokok','Berolahraga teratur','Menjaga kebersihan lingkungan','Membiasakan postur duduk tegak'],
+      fakta: 'Paru-paru orang dewasa punya sekitar 300–500 juta alveolus. Kalau dibentangkan, luasnya bisa hampir seluas lapangan tenis!'
+    },
+    cerna: {
+      nama: 'Sistem Pencernaan', emoji: '🍎',
+      fungsi: 'Mengubah makanan menjadi zat sederhana (sari makanan) yang dapat diserap tubuh.',
+      organ: [
+        {nama:'Mulut', fungsi:'Gigi mengunyah, lidah mencampur makanan, kelenjar ludah menghasilkan air liur berisi enzim amilase yang mulai mencerna karbohidrat.'},
+        {nama:'Kerongkongan', fungsi:'Makanan didorong ke lambung dengan gerakan peristaltik.'},
+        {nama:'Lambung', fungsi:'Makanan diaduk dan dicerna dengan asam lambung dan enzim pepsin (terutama untuk protein), sehingga menjadi bubur makanan.'},
+        {nama:'Usus halus', fungsi:'Pencernaan lanjutan dan penyerapan sari makanan ke darah melalui vili usus. Dibantu empedu (dari hati) dan enzim dari pankreas.'},
+        {nama:'Usus besar', fungsi:'Menyerap air dan membentuk sisa makanan menjadi feses.'},
+        {nama:'Rektum & anus', fungsi:'Menampung dan mengeluarkan feses.'}
+      ],
+      proses: [
+        'Pencernaan mekanik: makanan dihancurkan secara fisik (mengunyah, gerakan lambung).',
+        'Pencernaan kimiawi: makanan diurai oleh enzim dan cairan pencernaan.',
+        'Organ pelengkap: hati (menghasilkan empedu), kantung empedu, dan pankreas.'
+      ],
+      gangguan: ['Diare','Sembelit','Maag','Keracunan makanan','Cacingan'],
+      jaga: ['Mencuci tangan dengan sabun sebelum makan','Makan teratur dengan gizi seimbang (karbohidrat, protein, lemak, vitamin, mineral, serat)','Mengunyah makanan hingga halus','Minum air putih cukup','Menjaga kebersihan makanan','Mengurangi makanan terlalu pedas, asam, atau berlemak'],
+      fakta: 'Usus halus panjangnya sekitar 6–7 meter, lebih panjang dari tinggi tubuhmu!'
+    },
+    darah: {
+      nama: 'Sistem Peredaran Darah', emoji: '❤️',
+      fungsi: 'Mengedarkan oksigen dan sari makanan ke seluruh tubuh, mengangkut sisa metabolisme, serta membantu melawan penyakit.',
+      organ: [
+        {nama:'Jantung', fungsi:'Pemompa darah, terdiri atas empat ruang: dua serambi (atrium) dan dua bilik (ventrikel).'},
+        {nama:'Arteri (nadi)', fungsi:'Membawa darah dari jantung ke seluruh tubuh. Dindingnya tebal dan elastis, denyutnya dapat diraba.'},
+        {nama:'Vena (balik)', fungsi:'Membawa darah kembali ke jantung, memiliki katup.'},
+        {nama:'Kapiler', fungsi:'Pembuluh sangat halus tempat pertukaran zat antara darah dan sel.'},
+        {nama:'Sel darah merah (eritrosit)', fungsi:'Mengangkut oksigen dengan bantuan hemoglobin.'},
+        {nama:'Sel darah putih (leukosit)', fungsi:'Melawan kuman penyebab penyakit.'},
+        {nama:'Keping darah (trombosit)', fungsi:'Membantu pembekuan darah saat luka.'},
+        {nama:'Plasma darah', fungsi:'Bagian cair yang mengangkut zat makanan dan sisa metabolisme.'}
+      ],
+      proses: [
+        'Peredaran darah kecil: jantung → paru-paru → jantung (darah mengambil O₂ dan melepas CO₂).',
+        'Peredaran darah besar: jantung → seluruh tubuh → jantung (darah membagikan O₂ dan sari makanan).',
+        'Denyut nadi: jumlah denyut per menit dapat dihitung di pergelangan tangan atau leher, dan meningkat setelah berolahraga.'
+      ],
+      gangguan: ['Anemia (kekurangan sel darah merah/hemoglobin)','Tekanan darah tinggi atau rendah','Penyakit jantung','Pendarahan'],
+      jaga: ['Berolahraga teratur','Makan sayur, buah, dan makanan bergizi (misalnya yang mengandung zat besi)','Tidak merokok','Menjaga berat badan','Cukup tidur','Mengelola stres'],
+      fakta: 'Jantung berdetak sekitar 60–100 kali per menit saat istirahat. Dalam sehari bisa lebih dari 100.000 kali!'
+    }
+  },
+  keterkaitan: {
+    judul: 'Ketiganya Bekerja Sama',
+    paragraf: 'Sistem pencernaan menyediakan sari makanan, sistem pernapasan menyediakan oksigen, dan sistem peredaran darah mengantarkan keduanya ke seluruh sel untuk menghasilkan energi.',
+    contoh: 'Contoh: saat kamu berlari, otot butuh lebih banyak energi. Napas jadi lebih cepat (mengambil O₂), jantung berdetak lebih kencang (mengantar O₂ dan sari makanan), dan tubuh memakai cadangan makanan yang sudah dicerna.'
+  },
+  aktivitas: [
+    {judul:'Menghitung laju napas', emoji:'🏃', langkah:'Hitung napas selama 30 detik saat duduk, lalu setelah berlari di tempat. Bandingkan hasilnya.', alat:'Stopwatch/timer'},
+    {judul:'Model paru-paru sederhana', emoji:'🎈', langkah:'Buat model paru-paru dari botol plastik, balon, dan sedotan untuk memperagakan inspirasi dan ekspirasi.', alat:'Botol 1,5 L, 2 balon, sedotan, gunting'},
+    {judul:'Menghitung denyut nadi', emoji:'💓', langkah:'Raba denyut di pergelangan tangan saat istirahat dan setelah beraktivitas. Catat selisihnya.', alat:'Timer'},
+    {judul:'Menguji pencernaan mekanik & kimiawi', emoji:'🍚', langkah:'Kunyah nasi atau roti lama-lama, lalu rasakan rasa manis. Itu kerja enzim amilase!', alat:'Nasi/roti putih'},
+    {judul:'Poster cara menjaga organ', emoji:'🖼️', langkah:'Susun poster atau infografis tentang cara menjaga kesehatan organ tubuh.', alat:'Kertas, pensil warna'},
+    {judul:'Diskusi kelas', emoji:'💬', langkah:'Diskusikan: mengapa tubuh terasa lemas jika tidak sarapan, dan mengapa napas memburu setelah berlari?', alat:'Buku catatan'}
+  ],
+  kuis: [],   // diisi di bawah (butuh banyak baris)
+  share: { kode:'kelas5-ipa', kelas:'5', aktif:['napas','cerna','darah'], pesan:'Ayo belajar Sistem Organ Tubuh Manusia bersama!' },
+  sandiHash: null, // diisi saat init (hash dari 'guru123')
+  sandiHint: 'Sandi awal: guru123',
+  terakhirDiubah: null
+};
+
+/* ---------------------- 3. BANK SOAL (15 butir, 3 bab) ---------------------- */
+const BANK_SOAL = [
+  /* ---- Sistem Pernapasan ---- */
+  {id:'q1', sistem:'napas', tipe:'pg', tanya:'Urutan jalur udara dari hidung sampai paru-paru yang benar adalah …',
+   pilihan:['Hidung → faring → laring → trakea → bronkus → paru-paru','Hidung → trakea → laring → faring → paru-paru','Hidung → bronkus → trakea → laring → paru-paru','Hidung → laring → faring → bronkus → trakea'], jawab:0,
+   penjelasan:'Udara masuk lewat hidung, lalu faring, laring, trakea, bronkus, dan akhirnya paru-paru.'},
+  {id:'q2', sistem:'napas', tipe:'pg', tanya:'Saat kita menarik napas (inspirasi), apa yang terjadi pada diafragma?',
+   pilihan:['Diafragma mengendur dan rongga dada mengecil','Diafragma berkontraksi dan rongga dada membesar','Diafragma tidak bergerak sama sekali','Diafragma menutup saluran napas'], jawab:1,
+   penjelasan:'Diafragma berkontraksi (mendatar) sehingga rongga dada membesar dan udara masuk.'},
+  {id:'q3', sistem:'napas', tipe:'pg', tanya:'Bagian paru-paru tempat pertukaran oksigen dan karbon dioksida disebut …',
+   pilihan:['Bronkus','Alveolus','Trakea','Epiglotis'], jawab:1,
+   penjelasan:'Alveolus adalah kantung udara kecil berdinding tipis yang dikelilingi kapiler darah.'},
+  {id:'q4', sistem:'napas', tipe:'pg', tanya:'Rambut hidung dan lendir berfungsi untuk …',
+   pilihan:['Menyaring debu agar tidak masuk ke saluran napas','Menghasilkan suara','Mencerna makanan','Memompa darah'], jawab:0,
+   penjelasan:'Rambut hidung dan lendir menyaring debu; udara juga dihangatkan dan dilembapkan.'},
+  {id:'q5', sistem:'napas', tipe:'pg', tanya:'Penyakit yang membuat saluran napas menyempit sehingga sesak dan mengi disebut …',
+   pilihan:['Maag','Asma','Anemia','Sembelit'], jawab:1,
+   penjelasan:'Asma adalah gangguan pernapasan yang membuat saluran napas menyempit.'},
+  {id:'q6', sistem:'napas', tipe:'tf', tanya:'Merokok dapat merusak paru-paru karena asapnya mengandung zat berbahaya.',
+   pilihan:['Benar','Salah'], jawab:0, penjelasan:'Benar. Asap rokok merusak alveolus dan memicu kanker, bronkitis, serta penyakit jantung.'},
+  /* ---- Sistem Pencernaan ---- */
+  {id:'q7', sistem:'cerna', tipe:'pg', tanya:'Pencernaan mekanik adalah pencernaan yang …',
+   pilihan:['Mengurai makanan dengan enzim','Menghancurkan makanan secara fisik, misalnya mengunyah','Menyerap air di usus besar','Mengubah makanan menjadi gas'], jawab:1,
+   penjelasan:'Pencernaan mekanik = penghancuran fisik (mengunyah, gerakan lambung). Kimiawi = diurai enzim.'},
+  {id:'q8', sistem:'cerna', tipe:'pg', tanya:'Enzim amilase mulai mencerna karbohidrat pada organ mana?',
+   pilihan:['Lambung','Mulut','Usus besar','Pankreas'], jawab:1,
+   penjelasan:'Air liur di mulut mengandung enzim amilase yang mengubah karbohidrat menjadi gula sederhana. Itu sebabnya nasi terasa manis bila dikunyah lama!'},
+  {id:'q9', sistem:'cerna', tipe:'pg', tanya:'Penyerapan sari makanan terjadi di …',
+   pilihan:['Kerongkongan dan lambung','Usus halus melalui vili usus','Rektum dan anus','Kantung empedu'], jawab:1,
+   penjelasan:'Sari makanan diserap di usus halus melalui vili usus, lalu masuk ke darah.'},
+  {id:'q10', sistem:'cerna', tipe:'pg', tanya:'Fungsi usus besar dalam pencernaan adalah …',
+   pilihan:['Menyerap air dan membentuk feses','Menghasilkan asam lambung','Mengunyah makanan','Memompa darah'], jawab:0,
+   penjelasan:'Usus besar menyerap air lalu membentuk sisa makanan menjadi feses.'},
+  {id:'q11', sistem:'cerna', tipe:'pg', tanya:'Organ pelengkap pencernaan yang menghasilkan empedu adalah …',
+   pilihan:['Ginjal','Hati','Jantung','Paru-paru'], jawab:1,
+   penjelasan:'Hati menghasilkan empedu untuk membantu mencerna lemak; empedu disimpan di kantung empedu.'},
+  {id:'q12', sistem:'cerna', tipe:'tf', tanya:'Mencuci tangan dengan sabun sebelum makan dapat membantu mencegah diare.',
+   pilihan:['Benar','Salah'], jawab:0, penjelasan:'Benar. Tangan bersih mengurangi kuman penyebab diare dan keracunan makanan.'},
+  /* ---- Sistem Peredaran Darah ---- */
+  {id:'q13', sistem:'darah', tipe:'pg', tanya:'Mengapa jantung disebut pemompa darah?',
+   pilihan:['Karena jantung menghasilkan darah baru','Karena jantung berkontraksi dan mengendur untuk mendorong darah di seluruh saluran darah','Karena jantung menyaring debu','Karena jantung mencerna makanan'], jawab:1,
+   penjelasan:'Jantung berkontraksi dan mengendur secara bergantian sehingga darah terdorong masuk ke pembuluh darah.'},
+  {id:'q14', sistem:'darah', tipe:'pg', tanya:'Bagian darah yang mengangkut oksigen adalah …',
+   pilihan:['Sel darah putih','Keping darah','Sel darah merah (eritrosit)','Plasma darah'], jawab:2,
+   penjelasan:'Eritrosit mengandung hemoglobin yang mengikat oksigen.'},
+  {id:'q15', sistem:'darah', tipe:'pg', tanya:'Peredaran darah kecil mengalir dari …',
+   pilihan:['Jantung → paru-paru → jantung','Jantung → seluruh tubuh → jantung','Paru-paru → usus → jantung','Tubuh → paru-paru → tubuh'], jawab:0,
+   penjelasan:'Peredaran darah kecil (pulmonalis): jantung → paru-paru → jantung. Peredaran besar: jantung → seluruh tubuh → jantung.'},
+  {id:'q16', sistem:'darah', tipe:'pg', tanya:'Pembuluh darah yang membawa darah dari jantung ke seluruh tubuh dan dapat diraba denyutnya adalah …',
+   pilihan:['Kapiler','Vena','Arteri (nadi)','Alveolus'], jawab:2,
+   penjelasan:'Arteri berdinding tebal dan elastis, denyutnya bisa diraba di pergelangan tangan atau leher.'},
+  {id:'q17', sistem:'darah', tipe:'tf', tanya:'Denyut nadi setelah berolahraga biasanya menjadi lebih cepat.',
+   pilihan:['Benar','Salah'], jawab:0, penjelasan:'Benar. Otot membutuhkan lebih banyak oksigen sehingga jantung berdetak lebih cepat.'},
+  /* ---- Lintas bab: keterkaitan antar sistem ---- */
+  {id:'q18', sistem:'darah', tipe:'pg', tanya:'Mengapa tubuh terasa lemas jika tidak sarapan?',
+   pilihan:['Karena sistem pernapasan berhenti bekerja','Karena tidak ada sari makanan yang diubah menjadi energi untuk sel','Karena jantung berhenti memompa','Karena alveolus mengempis'], jawab:1,
+   penjelasan:'Sarapan menyediakan sari makanan. Tanpa itu, sel kekurangan bahan bakar sehingga tubuh lemas.'}
+];
+
+/* ---------------------- 4. PENYIMPANAN DATA ---------------------- */
+const KEY = { data:'rbc:data:v1', prog:'rbc:progres:v1', sesi:'rbc:sesi:v1' };
+
+const Store = {
+  bisa: (() => { try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; } catch(e){ return false; } })(),
+  get(k, fallback){
+    if(!this.bisa) return fallback;
+    try{ const raw = localStorage.getItem(k); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; }
+  },
+  set(k, v){
+    if(!this.bisa) return false;
+    try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; }
+  },
+  del(k){ if(this.bisa){ try{ localStorage.removeItem(k); }catch(e){} } }
+};
+
+/* sessionStorage juga bisa diblokir (mis. iframe sandbox): bungkus agar tidak pernah melempar error */
+const Sesi = {
+  get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} },
+  del(k){ try{ sessionStorage.removeItem(k); }catch(e){} }
+};
+
+/* Penggabungan cerdas: data tersimpan tidak menimpa field baru dari versi kode */
+function deepMerge(base, patch){
+  if(Array.isArray(base)) return Array.isArray(patch) ? patch : base;
+  if(base && typeof base === 'object' && patch && typeof patch === 'object'){
+    const out = Object.assign({}, base);
+    Object.keys(patch).forEach(k => { out[k] = (k in base) ? deepMerge(base[k], patch[k]) : patch[k]; });
+    return out;
+  }
+  return patch === undefined ? base : patch;
+}
+
+const DB = {
+  data: null,
+  load(){
+    const saved = Store.get(KEY.data, null);
+    this.data = saved ? deepMerge(clone(DEFAULT_DATA), saved) : clone(DEFAULT_DATA);
+    // Kuis: kalau tersimpan belum punya soal (atau kosong), pakai bank soal bawaan
+    if(!Array.isArray(this.data.kuis) || this.data.kuis.length === 0){
+      this.data.kuis = clone(BANK_SOAL);
+      this.save();
+    }
+    if(this.data.sandiHash === null) this.data.sandiHash = hash('guru123');
+    return this.data;
+  },
+  save(){
+    this.data.terakhirDiubah = nowISO();
+    const ok = Store.set(KEY.data, this.data);
+    if(!ok) toast('Perubahan tidak bisa disimpan: penyimpanan browser penuh/diblokir.', 'err');
+    return ok;
+  },
+  reset(keepProgress=true){
+    const prog = keepProgress ? Store.get(KEY.prog, null) : null;
+    Store.del(KEY.data);
+    if(!keepProgress) Store.del(KEY.prog);
+    this.load();
+    if(keepProgress && prog) Store.set(KEY.prog, prog);
+  }
+};
+
+/* Hash sederhana (djb2) — bukan kriptografi kuat, cukup untuk pembatas UI */
+function hash(str){
+  let h = 5381;
+  for(let i=0;i<String(str).length;i++){ h = ((h << 5) + h) ^ String(str).charCodeAt(i); }
+  return (h >>> 0).toString(16);
+}
+
+const Progress = {
+  d: { siswa:'', baca:{}, kuis:{}, aktivitas:[], skorTotal:0, terakhir:null, riwayat:[] },
+  load(){
+    this.d = Object.assign({ siswa:'', baca:{}, kuis:{}, aktivitas:[], skorTotal:0, terakhir:null, riwayat:[] }, Store.get(KEY.prog, {}));
+    if(!this.d.baca || typeof this.d.baca !== 'object') this.d.baca = {};
+    if(!this.d.kuis || typeof this.d.kuis !== 'object') this.d.kuis = {};
+    if(!Array.isArray(this.d.aktivitas)) this.d.aktivitas = [];
+    if(!Array.isArray(this.d.riwayat)) this.d.riwayat = [];
+    return this.d;
+  },
+  save(){ if(!Store.set(KEY.prog, this.d)) toast('Progres tidak tersimpan (penyimpanan diblokir).','err'); },
+  tandaiBab(k){
+    if(this.d.baca[k]) return false;
+    this.d.baca[k] = nowISO(); this.d.terakhir = nowISO(); this.save(); return true;
+  },
+  catatKuis(sistem, benar, total){
+    this.d.kuis[sistem] = { benar, total, nilai: pct(benar,total), waktu: nowISO() };
+    this.d.riwayat.unshift({ sistem, benar, total, nilai: pct(benar,total), waktu: nowISO() });
+    this.d.riwayat = this.d.riwayat.slice(0,20);
+    this.d.terakhir = nowISO();
+    this.save();
+  },
+  toggleAktivitas(i){
+    const idx = this.d.aktivitas.indexOf(i);
+    if(idx >= 0) this.d.aktivitas.splice(idx,1); else this.d.aktivitas.push(i);
+    this.d.terakhir = nowISO(); this.save();
+  },
+  kuisBabSelesai(){ return ['napas','cerna','darah'].filter(k=>this.d.kuis[k]).length; },
+  nilaiRata(){
+    const v = Object.values(this.d.kuis).map(x=>x.nilai);
+    return v.length ? Math.round(v.reduce((a,b)=>a+b,0)/v.length) : 0;
+  },
+  persen(totalBab){
+    const bab = pct(Object.keys(this.d.baca).length, totalBab);
+    const kuis = pct(this.kuisBabSelesai(), 3);
+    const nilai = this.nilaiRata();
+    return Math.round(bab*0.4 + kuis*0.2 + nilai*0.4);
+  }
+};
+
+/* ---------------------- 5. SVG ILUSTRASI ---------------------- */
+const Art = {
+  /* maskot kecil, variasikan dengan ekspresi */
+  maskot(mood='happy', size=120){
+    const mouth = mood==='happy' ? 'M42 66q18 18 36 0' : mood==='sedih' ? 'M44 72q16-14 32 0' : 'M46 68h28';
+    const eyes = mood==='kaget' ? '<circle cx="50" cy="52" r="7" fill="#2B2140"/><circle cx="70" cy="52" r="7" fill="#2B2140"/>'
+                : '<circle cx="50" cy="53" r="5" fill="#2B2140"/><circle cx="70" cy="53" r="5" fill="#2B2140"/>';
+    return `<svg viewBox="0 0 120 120" width="${size}" height="${size}" role="img" aria-label="Maskot">
+      <circle cx="60" cy="60" r="50" fill="#FFD93D"/>
+      <circle cx="60" cy="60" r="58" fill="none" stroke="#FF9F45" stroke-width="5" stroke-dasharray="7 9" opacity=".8"/>
+      ${eyes}
+      <path d="${mouth}" stroke="#2B2140" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="36" cy="66" r="6" fill="#FF6B9D" opacity=".55"/><circle cx="84" cy="66" r="6" fill="#FF6B9D" opacity=".55"/>
+      <path d="M26 88q10 8 18 2" stroke="#A66CFF" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>`;
+  },
+
+  napas(){
+    return `<svg viewBox="0 0 200 150" role="img" aria-label="Ilustrasi paru-paru">
+      <g class="breathe">
+        <path d="M100 22v40" stroke="#4D96FF" stroke-width="9" stroke-linecap="round"/>
+        <path d="M100 58 68 40M100 58l32-18" stroke="#4D96FF" stroke-width="7" stroke-linecap="round"/>
+        <path d="M96 52c-16-14-46-10-46 22v30c0 18 10 24 22 22 16-3 24-16 24-34z" fill="#7FB2FF"/>
+        <path d="M104 52c16-14 46-10 46 22v30c0 18-10 24-22 22-16-3-24-16-24-34z" fill="#4D96FF"/>
+        <path d="M56 78c10-4 22 2 24 14M144 78c-10-4-22 2-24 14" stroke="#DBE9FF" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+      <circle cx="26" cy="26" r="7" fill="#FFD93D"/><circle cx="174" cy="40" r="5" fill="#FF6B9D"/><circle cx="160" cy="20" r="4" fill="#5FD068"/>
+    </svg>`;
+  },
+  cerna(){
+    return `<svg viewBox="0 0 200 150" role="img" aria-label="Ilustrasi lambung dan usus">
+      <path d="M92 18c0 14 12 20 12 34" stroke="#FFB27A" stroke-width="13" fill="none" stroke-linecap="round"/>
+      <path d="M104 50c22 0 40 12 40 34 0 18-12 26-24 26s-14-10-24-10c-14 0-24 8-34 2" fill="#FF9F45"/>
+      <path d="M104 50c-24 0-38 14-38 32 0 12 6 18 12 20" fill="#FFC48A"/>
+      <path d="M78 108c-12 8-14 20-2 24 10 4 18-4 28 0s20 10 30 2" stroke="#FF9F45" stroke-width="11" fill="none" stroke-linecap="round"/>
+      <circle cx="132" cy="72" r="7" fill="#FFE0C2"/><circle cx="118" cy="90" r="5" fill="#FFE0C2"/>
+      <path d="M30 40c14-10 26-6 26 6s-14 16-14 26" stroke="#5FD068" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="168" cy="26" r="6" fill="#FFD93D"/>
+    </svg>`;
+  },
+  darah(){
+    return `<svg viewBox="0 0 200 150" role="img" aria-label="Ilustrasi jantung dan aliran darah">
+      <path class="pulse-heart" d="M100 124s-52-30-52-66a30 30 0 0 1 52-20 30 30 0 0 1 52 20c0 36-52 66-52 66z" fill="#FF6B9D"/>
+      <path d="M100 124s-52-30-52-66a30 30 0 0 1 52-20z" fill="#FF4C86" opacity=".55"/>
+      <path d="M100 44v34l22 14" stroke="#FFE1EC" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M20 60c-8 8-8 20 0 28M180 60c8 8 8 20 0 28" stroke="#4D96FF" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="30" cy="30" r="6" fill="#FFD93D"/><circle cx="172" cy="112" r="7" fill="#A66CFF"/>
+    </svg>`;
+  },
+  sistemIco(k){
+    return k==='napas' ? this.napas() : k==='cerna' ? this.cerna() : this.darah();
+  }
+};
+
+/* ---------------------- 6. STATE UI & ROUTER ---------------------- */
+const TABS = [
+  {id:'home',     label:'🏠 Beranda'},
+  {id:'materi',   label:'📚 Materi'},
+  {id:'kuis',     label:'🎯 Kuis'},
+  {id:'aktivitas',label:'🧪 Aktivitas'},
+  {id:'progres',  label:'📈 Progres'},
+  {id:'guru',     label:'🧑‍🏫 Guru'}
+];
+
+const UI = {
+  screen:'home',
+  babAktif:'napas',
+  tabGuru:'identitas',
+  kuis: { sistem:'napas', idx:0, jawaban:[], mulai:null, selesai:false },
+  akordeon:{}, // id organ terbuka
+  guruMasuk: Sesi.get('rbc:guru') === '1'
+};
+
+/* State penyaring di dashboard */
+const G = { sub:'identitas', tabSistem:'napas' };
+
+function go(screen, opts={}){
+  if(!TABS.some(t=>t.id===screen)) screen = 'home';
+  UI.screen = screen;
+  $$('.screen').forEach(s=>s.classList.remove('active'));
+  const el = $('#screen-' + screen);
+  if(el) el.classList.add('active');
+  location.hash = screen === 'home' ? '' : screen;
+  renderNav();
+  window.scrollTo({top:0, behavior:'instant'});
+  if(screen === 'home') renderHome();
+  if(screen === 'materi') renderMateri(opts.bab);
+  if(screen === 'kuis') renderKuisRoot(opts.sistem);
+  if(screen === 'aktivitas') renderAktivitas();
+  if(screen === 'progres') renderProgres();
+  if(screen === 'guru') renderGuru();
+}
+
+function renderNav(){
+  const nav = $('#navLinks');
+  nav.innerHTML = TABS.map(t=>{
+    const done = t.id==='materi' ? (Object.keys(Progress.d.baca).length===3 ? '<span class="dot" title="Semua bab dibaca"></span>' : '')
+               : t.id==='kuis' ? (Progress.kuisBabSelesai()===3 ? '<span class="dot" title="Semua kuis selesai"></span>' : '') : '';
+    return `<button class="navbtn ${UI.screen===t.id?'active':''}" data-go="${t.id}">${t.label}${done}</button>`;
+  }).join('');
+  const nama = Progress.d.siswa || 'Tamu';
+  $('#whoName').textContent = nama;
+  $('#whoAva').textContent = Progress.d.siswa ? '🧒' : '🙂';
+  $('#whoBox').title = Progress.d.siswa ? 'Siswa: ' + nama + ' — klik untuk ganti nama' : 'Klik untuk isi namamu';
+}
+
+function ringHTML(percent, label, color='#5FD068', size=132){
+  const r = 52, c = 2*Math.PI*r, off = c - (clamp(percent,0,100)/100)*c;
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg viewBox="0 0 120 120" width="${size}" height="${size}" aria-hidden="true">
+      <circle cx="60" cy="60" r="${r}" fill="none" stroke="#F1ECF7" stroke-width="12"/>
+      <circle cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round"
+        stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" style="transition:stroke-dashoffset .8s ease"/>
+    </svg>
+    <span class="val">${percent}%</span>
+  </div>`;
+}
+
+/* ---------------------- 7. BERANDA ---------------------- */
+function renderHome(){
+  const d = DB.data;
+  $('#homeChipMateri').textContent = `📚 ${d.meta.mapel} · ${d.meta.materi}`;
+  $('#homeSapaan').textContent = (Progress.d.siswa ? `Halo, ${Progress.d.siswa}! ` : '') + d.meta.sapaan;
+  $('#homeTujuan').innerHTML = d.tujuan.map(t=>`<li>${esc(t)}</li>`).join('') || '<li class="muted">Belum ada tujuan pembelajaran.</li>';
+  $('#whoName').textContent = Progress.d.siswa || 'Tamu';
+
+  const aktif = d.share.aktif && d.share.aktif.length ? d.share.aktif : Object.keys(d.sistem);
+  $('#homeSystems').innerHTML = aktif.map(k=>{
+    const s = d.sistem[k]; if(!s) return '';
+    const c = COLORS[k] || COLORS.napas;
+    const dibaca = !!Progress.d.baca[k];
+    const kuis = Progress.d.kuis[k];
+    return `<button class="syscard" data-go="materi" data-bab="${k}" style="--sc:${c.tint};--sc2:${c.accent}" aria-label="Buka ${esc(s.nama)}">
+      <div class="ico">${Art.sistemIco(k)}</div>
+      <div class="row" style="gap:6px">
+        <span class="chip ${c.chip}">${s.emoji} ${esc(s.nama)}</span>
+        ${dibaca?'<span class="chip green">✓ dibaca</span>':''}
+        ${kuis?`<span class="chip ${c.chip}">nilai ${kuis.nilai}</span>`:''}
+      </div>
+      <p class="small muted" style="margin:0">${esc(s.fungsi)}</p>
+      <div class="bar"><i style="width:${dibaca?100:0}%"></i></div>
+      <span class="small" style="font-weight:800;color:${c.accent}">Pelajari sekarang</span>
+      <span class="arrow">→</span>
+    </button>`;
+  }).join('');
+
+  const total = 3;
+  const persen = Progress.persen(total);
+  $('#homeRing').outerHTML = ringHTML(persen, 'progres', '#A66CFF').replace('class="ring"', 'class="ring" id="homeRing"');
+  const nilai = Progress.nilaiRata();
+  $('#homeProgJudul').textContent = persen >= 100 ? 'Hebat, semua selesai! 🎉' : persen > 0 ? 'Terus semangat!' : 'Ayo mulai!';
+  $('#homeProgList').innerHTML = `
+    <div class="kv"><span>Bab dibaca</span><b>${Object.keys(Progress.d.baca).length}/3</b></div>
+    <div class="kv"><span>Kuis selesai</span><b>${Progress.kuisBabSelesai()}/3</b></div>
+    <div class="kv"><span>Rata-rata nilai</span><b>${nilai || '—'}</b></div>`;
+}
+
+/* ---------------------- 8. MATERI ---------------------- */
+function renderMateri(bab){
+  if(bab && DB.data.sistem[bab]) UI.babAktif = bab;
+  const d = DB.data;
+  $('#materiJudul').textContent = d.meta.materi;
+  $('#materiChip').textContent = `${d.meta.mapel} · Kelas ${d.meta.kelas} (Fase ${d.meta.fase})`;
+  $('#materiSub').textContent = `Pilih bab di bawah, lalu baca pelan-pelan. Klik setiap organ untuk melihat fungsinya!`;
+
+  const tabs = Object.keys(d.sistem).map((k,i)=>{
+    const s = d.sistem[k]; const c = COLORS[k]||COLORS.napas;
+    return `<button class="tab ${UI.babAktif===k?'active':''}" role="tab" data-babtab="${k}">
+      <span class="num" style="background:${c.tint};color:${c.accent}">${String.fromCharCode(65+i)}</span> ${s.emoji} ${esc(s.nama)}
+      ${Progress.d.baca[k]?' ✓':''}
+    </button>`;
+  }).join('');
+  $('#materiTabs').innerHTML = tabs;
+
+  const k = UI.babAktif, s = d.sistem[k], c = COLORS[k]||COLORS.napas;
+  const organHTML = s.organ.map((o,i)=>{
+    const oid = k + ':' + i;
+    const open = !!UI.akordeon[oid];
+    return `<div class="organ ${open?'open':''}" data-organ="${oid}">
+      <button aria-expanded="${open}">
+        <span class="oglyph" style="--oph:${c.tint}">${['1','2','3','4','5','6','7','8'][i]||'•'}</span>
+        <span>${esc(o.nama)}</span><span class="caret">▾</span>
+      </button>
+      <div class="obody"><b>Fungsi:</b> ${esc(o.fungsi)}</div>
+    </div>`;
+  }).join('');
+
+  $('#materiPanel').innerHTML = `
+    <div class="card" style="border-color:${c.tint}">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div style="flex:1;min-width:220px">
+          <span class="chip ${c.chip}">${s.emoji} Bab ${String.fromCharCode(65+Object.keys(d.sistem).indexOf(k))}</span>
+          <h2 style="margin:10px 0 6px">${esc(s.nama)}</h2>
+          <p class="muted" style="margin:0"><b>Fungsi utama:</b> ${esc(s.fungsi)}</p>
+        </div>
+        <div style="width:190px;flex:0 0 auto">${Art.sistemIco(k)}</div>
+      </div>
+
+      <div class="divider"></div>
+      <h3>🔍 Organ &amp; Fungsinya</h3>
+      <p class="small muted">Klik nama organ untuk membuka penjelasan.</p>
+      <div id="organList">${organHTML}</div>
+
+      <div class="grid-2 mt">
+        <div class="card" style="background:#FBF7FF;border-color:#EFE6FF">
+          <h3>⚙️ Bagaimana Prosesnya?</h3>
+          <div class="steps">
+            ${s.proses.map((p,i)=>`<div style="display:flex;gap:10px;align-items:flex-start"><span class="stepnum">${i+1}</span><span>${esc(p)}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="card" style="background:#FFF8E1;border-color:#FFE9B8">
+          <h3>💡 Tahukah Kamu?</h3>
+          <p class="small" style="margin:0">${esc(s.fakta||'')}</p>
+        </div>
+      </div>
+
+      <div class="grid-2 mt">
+        <div class="card" style="border-color:#FFC9CC;background:#FFF8F9">
+          <h3>🩺 Gangguan Kesehatan</h3>
+          <div class="row">${s.gangguan.map(g=>`<span class="chip pink">${esc(g)}</span>`).join('')}</div>
+        </div>
+        <div class="card" style="border-color:#B9EFC3;background:#F6FEF7">
+          <h3>💚 Cara Menjaga Kesehatan</h3>
+          <ul class="clean" style="--dotc:${c.accent}">${s.jaga.map(g=>`<li class="small">${esc(g)}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="note blue mt">
+        <b>Ingat:</b> ketiga sistem organ bekerja bersama. ${esc(d.keterkaitan.paragraf)}
+      </div>
+    </div>
+
+    <div class="card mt" style="background:linear-gradient(140deg,#FFFFFF,#F3F9FF)">
+      <span class="eyebrow">✅ Tujuan Pembelajaran</span>
+      <ul class="clean" style="--dotc:var(--blue)">${d.tujuan.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>
+    </div>`;
+
+  const btn = $('#btnTandaiBab');
+  const sudah = !!Progress.d.baca[k];
+  btn.textContent = sudah ? '✅ Sudah ditandai selesai' : '✅ Tandai Selesai';
+  btn.disabled = sudah;
+  btn.onclick = () => {
+    if(Progress.tandaiBab(k)){
+      Sfx.ok();
+      toast('Mantap! Bab ' + s.nama + ' selesai dibaca.', 'ok');
+      renderMateri(k); renderNav();
+      if(Object.keys(Progress.d.baca).length===3) toast('Semua bab sudah dibaca. Coba kuisnya, yuk! 🎯','ok');
+    }
+  };
+  $$('.organ > button').forEach(b=>{
+    b.onclick = () => {
+      const wrap = b.parentElement, oid = wrap.dataset.organ;
+      UI.akordeon[oid] = !UI.akordeon[oid];
+      wrap.classList.toggle('open');
+      b.setAttribute('aria-expanded', String(!!UI.akordeon[oid]));
+      Sfx.click();
+    };
+  });
+}
+
+/* ---------------------- 9. KUIS ---------------------- */
+function soalUntuk(sistem){
+  const semua = DB.data.kuis || [];
+  return sistem === 'semua' ? semua.slice() : semua.filter(q=>q.sistem===sistem);
+}
+
+function renderKuisRoot(sistem){
+  if(sistem && UI.kuis.sistem !== sistem){ UI.kuis = { sistem, idx:0, jawaban:[], mulai:nowISO(), selesai:false }; }
+  const d = DB.data;
+  const kartu = ['napas','cerna','darah','semua'].map(k=>{
+    const isSemua = k==='semua';
+    const c = isSemua ? {chip:'purple', accent:'#A66CFF', tint:'#EEE3FF', emoji:'🏆'} : (COLORS[k]||COLORS.napas);
+    const s = isSemua ? {nama:'Tantangan Campuran', fungsi:'Semua bab digabung: pernapasan, pencernaan, dan peredaran darah.'} : d.sistem[k];
+    const jml = soalUntuk(k).length;
+    const hasil = Progress.d.kuis[k];
+    return `<div class="card pop" style="border-color:${c.tint}">
+      <div class="row" style="gap:8px">
+        <span class="chip ${c.chip}">${c.emoji} ${esc(s.nama)}</span>
+        ${hasil?`<span class="chip green">Nilai ${hasil.nilai}</span>`:'<span class="chip">belum dikerjakan</span>'}
+      </div>
+      <p class="small muted" style="min-height:44px;margin:10px 0">${esc(s.fungsi)}</p>
+      <div class="row" style="justify-content:space-between">
+        <span class="small"><b>${jml}</b> soal · ${isSemua?'gabungan':'pilihan ganda & benar-salah'}</span>
+        <button class="btn ${isSemua?'purple':''} sm" data-mulaikuis="${k}" ${jml?'':'disabled'}>Mulai</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const sudah = ['napas','cerna','darah'].map(k=>Progress.d.kuis[k]?`<span class="chip ${COLORS[k].chip}">${esc(DB.data.sistem[k].nama)}: ${Progress.d.kuis[k].nilai}</span>`:'').join('');
+
+  $('#kuisArea').innerHTML = `
+    <span class="eyebrow">🎯 Kuis Interaktif</span>
+    <h1 style="margin-bottom:6px">Uji Pemahamanmu</h1>
+    <p class="muted">Jawab satu per satu. Kamu langsung tahu benar atau salah, lengkap dengan penjelasannya.</p>
+    <div class="row" style="margin-bottom:16px">${sudah || '<span class="chip">Belum ada nilai. Yuk mulai!</span>'}</div>
+    <div class="grid">${kartu}</div>
+    <div class="card mt" style="background:#F7FDF9;border-color:#B9EFC3">
+      <h3 style="margin-bottom:6px">📋 Riwayat Pengerjaan</h3>
+      <div id="riwayatKuis" class="small"></div>
+    </div>`;
+  renderRiwayat();
+  $$('[data-mulaikuis]').forEach(b=> b.onclick = ()=>{
+    Sfx.click();
+    startKuis(b.dataset.mulaikuis);
+  });
+}
+
+function renderRiwayat(){
+  const r = Progress.d.riwayat || [];
+  const box = $('#riwayatKuis'); if(!box) return;
+  if(!r.length){ box.innerHTML = '<p class="muted" style="margin:0">Belum ada riwayat. Setelah mengerjakan kuis, hasilnya muncul di sini.</p>'; return; }
+  box.innerHTML = `<div class="tablewrap"><table><thead><tr><th>Waktu</th><th>Bab</th><th>Benar</th><th>Nilai</th></tr></thead><tbody>
+    ${r.slice(0,8).map(x=>`<tr><td>${fmtDateTime(x.waktu)}</td><td>${esc(x.sistem==='semua'?'Campuran':(DB.data.sistem[x.sistem]?.nama||x.sistem))}</td><td>${x.benar}/${x.total}</td><td><b>${x.nilai}</b></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+function startKuis(sistem){
+  UI.kuis = { sistem, idx:0, jawaban:[], mulai:nowISO(), selesai:false };
+  renderSoal();
+}
+
+function renderSoal(){
+  const st = UI.kuis;
+  const daftar = soalUntuk(st.sistem);
+  if(!daftar.length){ $('#kuisArea').innerHTML = '<div class="card">Belum ada soal untuk bab ini. Guru dapat menambahkannya di Dashboard.</div>'; return; }
+  if(st.idx >= daftar.length){ return renderHasil(); }
+  const q = daftar[st.idx];
+  const c = COLORS[q.sistem] || COLORS.napas;
+  const prog = pct(st.idx, daftar.length);
+  const sudahJawab = st.jawaban[st.idx];
+
+  $('#kuisArea').innerHTML = `
+    <div class="card" style="border-color:${c.tint}">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <button class="btn ghost tiny" id="kuisKeluar">← Daftar Kuis</button>
+        <span class="chip ${c.chip}">Soal ${st.idx+1} dari ${daftar.length}</span>
+      </div>
+      <div class="qbar"><i style="width:${prog}%"></i></div>
+      <div class="row" style="gap:8px;margin:6px 0 16px">
+        <span class="chip ${c.chip}">${c.emoji} ${esc(DB.data.sistem[q.sistem]?.nama||'Campuran')}</span>
+        <span class="chip">${q.tipe==='tf'?'Benar / Salah':'Pilihan Ganda'}</span>
+      </div>
+      <h2 style="font-size:clamp(1.1rem,2.4vw,1.45rem)">${esc(q.tanya)}</h2>
+      <div id="opsiBox" class="mt">
+        ${q.pilihan.map((p,i)=>`<button class="opt" data-opsi="${i}"><span class="k">${String.fromCharCode(65+i)}</span><span>${esc(p)}</span></button>`).join('')}
+      </div>
+      <div id="fbBox"></div>
+      <div class="row mt" style="justify-content:flex-end">
+        <button class="btn green" id="kuisNext" disabled>Lanjut →</button>
+      </div>
+    </div>`;
+
+  $('#kuisKeluar').onclick = ()=>{ Sfx.click(); renderKuisRoot(); };
+  $$('#opsiBox .opt').forEach(b=>{
+    b.onclick = ()=> jawabSoal(Number(b.dataset.opsi));
+    if(sudahJawab) b.disabled = true;
+  });
+  $('#kuisNext').onclick = ()=>{
+    Sfx.click(); st.idx++; renderSoal();
+  };
+  if(sudahJawab) tampilFeedback(q, sudahJawab.pilih, false);
+}
+
+function jawabSoal(i){
+  const st = UI.kuis, daftar = soalUntuk(st.sistem), q = daftar[st.idx];
+  if(st.jawaban[st.idx]) return;
+  st.jawaban[st.idx] = { pilih:i, soal:q.id };
+  tampilFeedback(q, i, true);
+}
+
+function tampilFeedback(q, pilih, animate){
+  const benar = pilih === q.jawab;
+  $$('#opsiBox .opt').forEach((b,idx)=>{
+    b.disabled = true;
+    if(idx === q.jawab) b.classList.add('correct');
+    else if(idx === pilih) b.classList.add('wrong');
+  });
+  $('#fbBox').innerHTML = `<div class="feedback ${benar?'ok':'no'}">
+    <span class="big">${benar?'🎉':'🤔'}</span>
+    <div><b>${benar?'Tepat sekali!':'Belum tepat.'}</b><br>${esc(q.penjelasan)}</div>
+  </div>`;
+  $('#kuisNext').disabled = false;
+  if(animate){
+    benar ? Sfx.ok() : Sfx.no();
+    if(benar) sparkle();
+  }
+}
+
+function sparkle(){
+  const box = $('#fbBox');
+  if(!box) return;
+  for(let i=0;i<10;i++){
+    const s = document.createElement('span');
+    s.textContent = ['✨','⭐','🌟'][i%3];
+    s.style.cssText = `position:fixed;pointer-events:none;font-size:${12+Math.random()*14}px;z-index:300;left:${30+Math.random()*40}%;top:${40+Math.random()*20}%;transition:transform .9s ease, opacity .9s`;
+    document.body.appendChild(s);
+    requestAnimationFrame(()=>{ s.style.transform = `translate(${(Math.random()-.5)*180}px, ${-60-Math.random()*90}px) rotate(${Math.random()*180}deg)`; s.style.opacity = '0'; });
+    setTimeout(()=>s.remove(), 1000);
+  }
+}
+
+function renderHasil(){
+  const st = UI.kuis;
+  const daftar = soalUntuk(st.sistem);
+  const benar = st.jawaban.filter((j,i)=> j && daftar[i] && j.pilih === daftar[i].jawab).length;
+  const total = daftar.length;
+  const nilai = pct(benar, total);
+  if(!st.selesai){
+    st.selesai = true;
+    Progress.catatKuis(st.sistem, benar, total);
+    if(nilai >= 80) Sfx.win(); else Sfx.ok();
+    renderNav();
+  }
+  const info = nilai>=90 ? {em:'🏆', judul:'Luar biasa!', teks:'Kamu sudah sangat paham materi ini.'}
+            : nilai>=70 ? {em:'😃', judul:'Bagus sekali!', teks:'Tinggal sedikit lagi menuju sempurna. Baca ulang bagian yang salah, ya.'}
+            : {em:'💪', judul:'Jangan menyerah!', teks:'Coba baca ulang materinya, lalu kerjakan kuis sekali lagi. Kamu pasti bisa!'};
+
+  const rincian = daftar.map((q,i)=>{
+    const j = st.jawaban[i];
+    const ok = j && j.pilih === q.jawab;
+    return `<div class="organ ${ok?'':'open'}" style="border-color:${ok?'#B9EFC3':'#FFC9CC'}">
+      <button style="background:${ok?'#F6FEF7':'#FFF9F9'}">
+        <span class="oglyph" style="--oph:${ok?'#DFF7E0':'#FFE1EC'}">${ok?'✓':'✗'}</span>
+        <span style="font-size:.9rem">${esc(q.tanya)}</span>
+      </button>
+      <div class="obody" style="padding-left:18px">
+        Jawabanmu: <b>${j ? esc(q.pilihan[j.pilih]) : 'tidak dijawab'}</b><br>
+        Jawaban benar: <b>${esc(q.pilihan[q.jawab])}</b><br>
+        <span class="muted">${esc(q.penjelasan)}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('#kuisArea').innerHTML = `
+    <div class="card center" style="background:linear-gradient(150deg,#FFF9E6,#FFF)">
+      <div style="display:grid;place-items:center;gap:4px">
+        ${Art.maskot(nilai>=70?'happy':'sedih', 110)}
+        <h1 style="margin:4px 0">${info.em} ${nilai}</h1>
+        <h3 style="margin:0">${info.judul}</h3>
+        <p class="muted" style="max-width:460px">${info.teks}</p>
+      </div>
+      <div class="row" style="justify-content:center;gap:14px;margin:10px 0">
+        <span class="chip green">Benar ${benar}</span>
+        <span class="chip pink">Salah ${total-benar}</span>
+        <span class="chip blue">Total ${total} soal</span>
+      </div>
+      <div class="row" style="justify-content:center">
+        <button class="btn green" id="ulangKuis">🔄 Kerjakan Ulang</button>
+        <button class="btn ghost" id="keDaftar">🎯 Pilih Kuis Lain</button>
+        <button class="btn yellow" data-go="progres">📈 Lihat Progres</button>
+      </div>
+    </div>
+    <div class="card mt">
+      <h3>🔎 Pembahasan Jawaban</h3>
+      <p class="small muted">Klik tiap soal untuk membaca pembahasannya.</p>
+      ${rincian}
+    </div>`;
+  $('#ulangKuis').onclick = ()=>{ Sfx.click(); startKuis(st.sistem); };
+  $('#keDaftar').onclick = ()=>{ Sfx.click(); renderKuisRoot(); };
+  $$('.organ > button').forEach(b=> b.onclick = ()=>{ b.parentElement.classList.toggle('open'); Sfx.click(); });
+}
+
+/* ---------------------- 10. AKTIVITAS ---------------------- */
+const timerState = { sisa:30, interval:null, target:'napas' };
+const counterState = { napas:0, nadi:0 };
+
+function renderAktivitas(){
+  const d = DB.data;
+  $('#aktivitasGrid').innerHTML = d.aktivitas.map((a,i)=>{
+    const done = Progress.d.aktivitas.includes(i);
+    return `<div class="card pop" style="border-color:${done?'#B9EFC3':'#F1ECF7'}">
+      <div class="row" style="justify-content:space-between">
+        <div style="font-size:2rem">${esc(a.emoji||'🔬')}</div>
+        ${done?'<span class="chip green">selesai</span>':'<span class="chip">belum</span>'}
+      </div>
+      <h3 style="margin:10px 0 6px">${esc(a.judul)}</h3>
+      <p class="small muted">${esc(a.langkah)}</p>
+      <div class="row" style="justify-content:space-between;margin-top:auto">
+        <span class="chip orange">🧰 ${esc(a.alat||'-')}</span>
+        <button class="btn ${done?'ghost':'green'} tiny" data-akt="${i}">${done?'Batalkan':'Tandai selesai'}</button>
+      </div>
+    </div>`;
+  }).join('');
+  $$('[data-akt]').forEach(b=> b.onclick = ()=>{
+    Progress.toggleAktivitas(Number(b.dataset.akt)); Sfx.ok(); renderAktivitas();
+  });
+  renderCounters();
+}
+
+function renderCounters(){
+  $('#napasVal').textContent = counterState.napas;
+  $('#nadiVal').textContent = counterState.nadi;
+  $('#napasMenit').textContent = counterState.napas * 2;
+  $('#nadiMenit').textContent = counterState.nadi * 2;
+  $('#timerVal').textContent = timerState.sisa;
+}
+
+$('#timerBtn').onclick = function(){
+  if(timerState.interval){ clearInterval(timerState.interval); timerState.interval = null; this.textContent = '▶️ Lanjutkan'; return; }
+  this.textContent = '⏸️ Jeda';
+  timerState.interval = setInterval(()=>{
+    timerState.sisa--;
+    renderCounters();
+    if(timerState.sisa <= 3 && timerState.sisa > 0) Sfx.beep(880,.08,'sine',.05);
+    if(timerState.sisa <= 0){
+      clearInterval(timerState.interval); timerState.interval = null;
+      $('#timerBtn').textContent = '▶️ Mulai Timer';
+      Sfx.win();
+      toast('Waktu 30 detik habis! Kalikan 2 untuk mendapat hitungan per menit.','ok');
+    }
+  }, 1000);
+};
+$$('[data-counter]').forEach(b=> b.onclick = ()=>{
+  counterState[b.dataset.counter]++; Sfx.beep(b.dataset.counter==='nadi'?520:700,.05,'triangle',.04); renderCounters();
+});
+$$('[data-reset]').forEach(b=> b.onclick = ()=>{
+  counterState[b.dataset.reset] = 0;
+  if(b.dataset.reset==='napas') timerState.sisa = 30;
+  renderCounters(); Sfx.click();
+});
+
+/* ---------------------- 11. PROGRES ---------------------- */
+function renderProgres(){
+  const d = DB.data;
+  const persen = Progress.persen(3);
+  const nilai = Progress.nilaiRata();
+  $('#progJudul').textContent = Progress.d.siswa ? `Hebat, ${Progress.d.siswa}!` : 'Ini Perjalananmu!';
+
+  const badges = [
+    {em:'📖', nama:'Pembaca Ceria', on:Object.keys(Progress.d.baca).length>=1, hint:'Baca 1 bab'},
+    {em:'📚', nama:'Rak Buku Lengkap', on:Object.keys(Progress.d.baca).length>=3, hint:'Baca semua bab'},
+    {em:'🎯', nama:'Juara Kuis', on:nilai>=80, hint:'Rata-rata nilai ≥ 80'},
+    {em:'🔥', nama:'Rajin Berlatih', on:Progress.kuisBabSelesai()>=3, hint:'Selesaikan 3 kuis bab'},
+    {em:'🧪', nama:'Ilmuwan Cilik', on:Progress.d.aktivitas.length>=3, hint:'Lakukan 3 aktivitas'},
+    {em:'🏆', nama:'Bintang Kelas', on:persen>=100, hint:'Progres 100%'}
+  ];
+
+  $('#progresArea').innerHTML = `
+    <div class="grid-2">
+      <div class="statbox">
+        ${ringHTML(persen,'progres','#A66CFF')}
+        <div>
+          <div class="eyebrow">Total Progres</div>
+          <h2 style="margin:2px 0 4px">${persen}%</h2>
+          <p class="small muted" style="margin:0">Dihitung dari bab dibaca (40%), kuis selesai (20%), dan rata-rata nilai (40%).</p>
+        </div>
+      </div>
+      <div class="card">
+        <span class="eyebrow">🧒 Identitas</span>
+        <div class="field mt-s">
+          <label class="fl" for="namaSiswa">Nama siswa</label>
+          <div class="row">
+            <input type="text" id="namaSiswa" placeholder="Tulis namamu" value="${esc(Progress.d.siswa||'')}" style="flex:1;min-width:160px" maxlength="40">
+            <button class="btn green sm" id="simpanNama">Simpan</button>
+          </div>
+          <div class="hint">Nama dipakai untuk menyapa dan dicantumkan pada ringkasan hasil.</div>
+        </div>
+        <div class="kv"><span>Terakhir belajar</span><b>${Progress.d.terakhir?fmtDateTime(Progress.d.terakhir):'—'}</b></div>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h3>📊 Rincian per Bab</h3>
+      <div class="grid" style="gap:12px">
+        ${Object.keys(d.sistem).map(k=>{
+          const s = d.sistem[k], c = COLORS[k], kq = Progress.d.kuis[k];
+          const okBaca = !!Progress.d.baca[k];
+          return `<div style="border:2px solid ${c.tint};border-radius:18px;padding:14px">
+            <div class="row" style="gap:8px"><span class="chip ${c.chip}">${s.emoji} ${esc(s.nama)}</span></div>
+            <div class="kv"><span>Dibaca</span><b>${okBaca?'✅ '+fmtDate(Progress.d.baca[k]):'—'}</b></div>
+            <div class="kv"><span>Nilai kuis</span><b>${kq?kq.nilai+' ('+kq.benar+'/'+kq.total+')':'—'}</b></div>
+            <button class="btn ghost tiny mt-s" data-go="materi" data-bab="${k}">Buka bab</button>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h3>🎖️ Lencana</h3>
+      <div class="badge-grid">
+        ${badges.map(b=>`<div class="badge ${b.on?'on':''}" title="${esc(b.hint)}"><span class="em">${b.em}</span>${esc(b.nama)}<div class="hint">${esc(b.hint)}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card mt">
+      <div class="row" style="justify-content:space-between">
+        <div>
+          <h3 style="margin:0">📄 Ringkasan Hasil Belajar</h3>
+          <p class="small muted" style="margin:4px 0 0">Bisa diunduh sebagai berkas teks untuk dikumpulkan ke guru.</p>
+        </div>
+        <div class="row">
+          <button class="btn blue sm" id="unduhRingkasan">⬇️ Unduh Ringkasan</button>
+          <button class="btn ghost sm" id="resetProgres">♻️ Reset Progres</button>
+        </div>
+      </div>
+      <div class="tablewrap mt-s">
+        <table><thead><tr><th>Bab</th><th>Dibaca</th><th>Benar</th><th>Nilai</th></tr></thead><tbody>
+          ${Object.keys(d.sistem).map(k=>{
+            const q = Progress.d.kuis[k], s = d.sistem[k];
+            return `<tr><td>${esc(s.nama)}</td><td>${Progress.d.baca[k]?'✅':'—'}</td><td>${q?q.benar+'/'+q.total:'—'}</td><td>${q?q.nilai:'—'}</td></tr>`;
+          }).join('')}
+          <tr><td><b>Rata-rata</b></td><td>${Object.keys(Progress.d.baca).length}/3</td><td>—</td><td><b>${nilai||'—'}</b></td></tr>
+        </tbody></table>
+      </div>
+    </div>`;
+
+  $('#simpanNama').onclick = ()=>{
+    const v = $('#namaSiswa').value.trim();
+    Progress.d.siswa = v; Progress.save(); Sfx.ok();
+    toast(v?`Halo, ${v}! Namamu tersimpan.`:'Nama dikosongkan.', 'ok');
+    renderNav(); renderProgres();
+  };
+  $('#unduhRingkasan').onclick = unduhRingkasan;
+  $('#resetProgres').onclick = ()=> konfirmasi('Hapus semua progres belajar?', 'Data bab, nilai kuis, lencana, dan nama siswa akan dihapus. Materi & soal tetap aman.', ()=>{
+    Progress.d = { siswa:'', baca:{}, kuis:{}, aktivitas:[], skorTotal:0, terakhir:null, riwayat:[] };
+    Progress.save(); renderProgres(); renderNav(); toast('Progres sudah direset.','ok');
+  });
+}
+
+function unduhRingkasan(){
+  const d = DB.data;
+  const L = [];
+  L.push('RINGKASAN HASIL BELAJAR');
+  L.push('='.repeat(46));
+  L.push(`Situs      : ${d.meta.namaSitus}`);
+  L.push(`Sekolah    : ${d.meta.sekolah}`);
+  L.push(`Mata Pelajaran : ${d.meta.mapel} — Kelas ${d.meta.kelas} (Fase ${d.meta.fase})`);
+  L.push(`Materi     : ${d.meta.materi}`);
+  L.push(`Guru       : ${d.meta.guru}`);
+  L.push(`Siswa      : ${Progress.d.siswa || '(belum diisi)'}`);
+  L.push(`Dicetak    : ${fmtDateTime(nowISO())}`);
+  L.push('');
+  L.push('RINCIAN');
+  Object.keys(d.sistem).forEach(k=>{
+    const s = d.sistem[k], q = Progress.d.kuis[k];
+    L.push(`- ${s.nama}`);
+    L.push(`    Dibaca      : ${Progress.d.baca[k] ? 'Sudah ('+fmtDate(Progress.d.baca[k])+')' : 'Belum'}`);
+    L.push(`    Nilai kuis  : ${q ? q.nilai + ' (benar '+q.benar+'/'+q.total+')' : 'Belum dikerjakan'}`);
+  });
+  L.push('');
+  L.push(`Total progres : ${Progress.persen(3)}%`);
+  L.push(`Rata-rata nilai: ${Progress.nilaiRata() || 0}`);
+  L.push(`Aktivitas selesai: ${Progress.d.aktivitas.length} dari ${d.aktivitas.length}`);
+  L.push('');
+  L.push('Catatan: dokumen ini dihasilkan otomatis oleh aplikasi Ruang Belajar Ceria.');
+  const blob = new Blob([L.join('\n')], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ringkasan-belajar-' + (Progress.d.siswa? Progress.d.siswa.replace(/[^a-z0-9]+/gi,'-'):'siswa') + '.txt';
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  toast('Ringkasan diunduh.','ok');
+}
+
+/* ---------------------- 12. MODAL & KONFIRMASI ---------------------- */
+function modal({em='💡', title='Info', body='', actions=[]}){
+  const dlg = $('#modal');
+  $('#modalEm').textContent = em;
+  $('#modalTitle').textContent = title;
+  $('#modalBody').innerHTML = body;
+  const box = $('#modalActions');
+  box.innerHTML = '';
+  actions.forEach((a,i)=>{
+    const b = document.createElement('button');
+    b.className = 'btn ' + (a.kind||'ghost') + ' sm';
+    b.textContent = a.label;
+    b.onclick = ()=>{ if(a.fn) a.fn(dlg); if(a.close !== false) dlg.close(); };
+    box.appendChild(b);
+  });
+  if(!actions.length){ const b=document.createElement('button'); b.className='btn ghost sm'; b.textContent='Tutup'; b.onclick=()=>dlg.close(); box.appendChild(b); }
+  dlg.showModal();
+  return dlg;
+}
+function konfirmasi(judul, teks, onYes, labelYes='Ya, lanjutkan'){
+  modal({em:'⚠️', title:judul, body:`<p class="small">${esc(teks)}</p>`, actions:[
+    {label:'Batal', kind:'ghost'},
+    {label:labelYes, kind:'pink', fn:onYes}
+  ]});
+}
+
+/* ---------------------- 13. DASHBOARD GURU ---------------------- */
+const GTABS = [
+  {id:'identitas', label:'🏫 Identitas'},
+  {id:'tujuan',    label:'🎯 Tujuan'},
+  {id:'materi',    label:'📚 Materi'},
+  {id:'aktivitas', label:'🧪 Aktivitas'},
+  {id:'kuis',      label:'❓ Soal Kuis'},
+  {id:'berbagi',   label:'🔗 Berbagi'},
+  {id:'keamanan',  label:'🔐 Keamanan & Data'}
+];
+
+function renderGuru(){
+  $('#gateCard').classList.toggle('hide', UI.guruMasuk);
+  $('#guruArea').classList.toggle('hide', !UI.guruMasuk);
+  $('#guruStatus').textContent = UI.guruMasuk ? '✏️ Mode Edit' : '🔒 Terkunci';
+  if(!UI.guruMasuk) return;
+
+  $('#guruTabs').innerHTML = GTABS.map(t=>`<button class="tab ${UI.tabGuru===t.id?'active':''}" data-gtab="${t.id}">${t.label}</button>`).join('');
+  const box = $('#guruPanel');
+  const f = {
+    identitas: gIdentitas, tujuan: gTujuan, materi: gMateri,
+    aktivitas: gAktivitas, kuis: gKuis, berbagi: gBerbagi, keamanan: gKeamanan
+  }[UI.tabGuru];
+  box.innerHTML = f ? f() : '';
+  bindGuru();
+}
+
+/* --- Identitas --- */
+function gIdentitas(){
+  const m = DB.data.meta;
+  const fields = [
+    ['namaSitus','Nama situs / aplikasi'],['sekolah','Nama sekolah'],['guru','Nama guru'],
+    ['mapel','Mata pelajaran'],['kelas','Kelas'],['fase','Fase'],['materi','Materi pokok']
+  ];
+  return `<div class="card">
+    <h3>🏫 Identitas Pembelajaran</h3>
+    <p class="small muted">Perubahan tampil langsung di beranda dan halaman materi siswa.</p>
+    <div class="grid">
+      ${fields.map(([k,l])=>`<div class="field"><label class="fl">${l}</label><input type="text" data-meta="${k}" value="${esc(m[k]||'')}" maxlength="90"></div>`).join('')}
+    </div>
+    <div class="field"><label class="fl">Sapaan di beranda</label>
+      <textarea data-meta="sapaan" maxlength="260">${esc(m.sapaan||'')}</textarea></div>
+    <div class="row">
+      <button class="btn green" data-guru-save="identitas">💾 Simpan Identitas</button>
+      <span class="small muted">Terakhir diubah: ${DB.data.terakhirDiubah?fmtDateTime(DB.data.terakhirDiubah):'—'}</span>
+    </div>
+  </div>`;
+}
+
+/* --- Tujuan --- */
+function gTujuan(){
+  const t = DB.data.tujuan;
+  return `<div class="card">
+    <h3>🎯 Tujuan Pembelajaran</h3>
+    <p class="small muted">Tulis satu tujuan per baris. Disarankan memakai kata kerja terukur (mengidentifikasi, menjelaskan, menerapkan…).</p>
+    <div class="field">
+      <label class="fl">Tujuan pembelajaran (satu per baris)</label>
+      <textarea id="tujuanTA" style="min-height:150px">${esc(t.join('\n'))}</textarea>
+    </div>
+    <div class="row">
+      <button class="btn green" data-guru-save="tujuan">💾 Simpan Tujuan</button>
+      <button class="btn ghost" id="tujuanContoh">↩️ Muat Contoh Bawaan</button>
+    </div>
+  </div>`;
+}
+
+/* --- Materi --- */
+function gMateri(){
+  const d = DB.data;
+  const k = G.tabSistem;
+  const s = d.sistem[k];
+  const tabs = Object.keys(d.sistem).map(key=>`<button class="tab ${key===k?'active':''}" data-gsistem="${key}">${d.sistem[key].emoji} ${esc(d.sistem[key].nama)}</button>`).join('');
+  return `<div class="card">
+    <h3>📚 Editor Materi</h3>
+    <div class="tabs">${tabs}</div>
+    <div class="grid">
+      <div class="field"><label class="fl">Nama bab / sistem</label><input type="text" id="mNama" value="${esc(s.nama)}" maxlength="60"></div>
+      <div class="field"><label class="fl">Emoji</label><input type="text" id="mEmoji" value="${esc(s.emoji)}" maxlength="4"></div>
+    </div>
+    <div class="field"><label class="fl">Fungsi utama</label><textarea id="mFungsi">${esc(s.fungsi)}</textarea></div>
+
+    <h4 style="margin-top:14px">Organ &amp; fungsinya</h4>
+    <div id="organEditor">
+      ${s.organ.map((o,i)=>`<div class="card" style="padding:12px;box-shadow:none;border-color:#F1ECF7;margin-bottom:10px" data-organrow="${i}">
+        <div class="row" style="align-items:flex-start">
+          <div style="flex:1;min-width:180px"><label class="fl">Nama organ</label><input type="text" class="oNama" value="${esc(o.nama)}" maxlength="70"></div>
+          <button class="btn ghost tiny" data-delorgan="${i}" title="Hapus organ" style="margin-top:22px">🗑️</button>
+        </div>
+        <label class="fl">Fungsi</label><textarea class="oFungsi" style="min-height:60px">${esc(o.fungsi)}</textarea>
+      </div>`).join('')}
+    </div>
+    <button class="btn ghost sm" id="addOrgan">➕ Tambah Organ</button>
+
+    <h4 style="margin-top:18px">Proses / mekanisme</h4>
+    <div class="field">
+      <label class="fl">Satu langkah per baris</label>
+      <textarea id="mProses" style="min-height:110px">${esc(s.proses.join('\n'))}</textarea>
+    </div>
+    <div class="grid">
+      <div class="field"><label class="fl">Gangguan kesehatan (pisahkan dengan koma)</label><textarea id="mGangguan">${esc(s.gangguan.join(', '))}</textarea></div>
+      <div class="field"><label class="fl">Cara menjaga kesehatan (pisahkan dengan koma)</label><textarea id="mJaga">${esc(s.jaga.join(', '))}</textarea></div>
+    </div>
+    <div class="field"><label class="fl">Fakta menarik (Tahukah kamu?)</label><textarea id="mFakta">${esc(s.fakta||'')}</textarea></div>
+    <div class="row"><button class="btn green" data-guru-save="materi">💾 Simpan Bab Ini</button></div>
+  </div>
+
+  <div class="card mt">
+    <h3>🔗 Keterkaitan Antar Sistem</h3>
+    <div class="field"><label class="fl">Judul</label><input type="text" id="kJudul" value="${esc(d.keterkaitan.judul)}" maxlength="80"></div>
+    <div class="field"><label class="fl">Paragraf penjelasan</label><textarea id="kParagraf">${esc(d.keterkaitan.paragraf)}</textarea></div>
+    <div class="field"><label class="fl">Contoh</label><textarea id="kContoh">${esc(d.keterkaitan.contoh)}</textarea></div>
+    <button class="btn green" data-guru-save="keterkaitan">💾 Simpan Keterkaitan</button>
+  </div>`;
+}
+
+/* --- Aktivitas --- */
+function gAktivitas(){
+  const a = DB.data.aktivitas;
+  return `<div class="card">
+    <h3>🧪 Kegiatan Pembelajaran</h3>
+    <div id="aktEditor">
+      ${a.map((x,i)=>`<div class="card" style="padding:12px;box-shadow:none;border-color:#F1ECF7;margin-bottom:10px" data-aktrow="${i}">
+        <div class="row" style="align-items:flex-start">
+          <div style="width:76px"><label class="fl">Emoji</label><input type="text" class="aEmoji" value="${esc(x.emoji||'🔬')}" maxlength="4"></div>
+          <div style="flex:1;min-width:180px"><label class="fl">Judul kegiatan</label><input type="text" class="aJudul" value="${esc(x.judul)}" maxlength="90"></div>
+          <button class="btn ghost tiny" data-delakt="${i}" style="margin-top:22px">🗑️</button>
+        </div>
+        <label class="fl">Langkah kegiatan</label><textarea class="aLangkah" style="min-height:60px">${esc(x.langkah)}</textarea>
+        <label class="fl">Alat &amp; bahan</label><input type="text" class="aAlat" value="${esc(x.alat||'')}" maxlength="90">
+      </div>`).join('')}
+    </div>
+    <div class="row">
+      <button class="btn ghost sm" id="addAkt">➕ Tambah Kegiatan</button>
+      <button class="btn green" data-guru-save="aktivitas">💾 Simpan Aktivitas</button>
+    </div>
+  </div>`;
+}
+
+/* --- Kuis --- */
+function gKuis(){
+  const q = DB.data.kuis;
+  const filter = G.kuisFilter || 'all';
+  const list = q.map((x,i)=>({x,i})).filter(({x})=> filter==='all' || x.sistem===filter);
+  return `<div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><h3 style="margin:0">❓ Bank Soal Kuis</h3><p class="small muted" style="margin:2px 0 0">${q.length} soal tersimpan. Kuis otomatis dinilai di sisi siswa.</p></div>
+      <button class="btn green sm" id="addSoal">➕ Tambah Soal</button>
+    </div>
+    <div class="tabs mt-s">
+      ${[['all','Semua'],['napas','Pernapasan'],['cerna','Pencernaan'],['darah','Peredaran Darah']].map(([k,l])=>
+        `<button class="tab ${filter===k?'active':''}" data-qfilter="${k}">${l} (${k==='all'?q.length:q.filter(x=>x.sistem===k).length})</button>`).join('')}
+    </div>
+    ${list.length? list.map(({x,i})=>soalCard(x,i)).join('') : '<p class="muted small">Belum ada soal pada filter ini.</p>'}
+  </div>`;
+}
+
+function soalCard(x,i){
+  const c = COLORS[x.sistem]||COLORS.napas;
+  return `<div class="card" style="padding:14px;box-shadow:none;border-color:${c.tint};margin-bottom:10px" data-soalrow="${i}">
+    <div class="row" style="justify-content:space-between;align-items:flex-start">
+      <div class="row" style="gap:6px">
+        <span class="chip ${c.chip}">${c.emoji} ${esc(DB.data.sistem[x.sistem]?.nama||'-')}</span>
+        <span class="chip">${x.tipe==='tf'?'Benar/Salah':'Pilihan Ganda'}</span>
+      </div>
+      <div class="row" style="gap:6px">
+        <button class="btn ghost tiny" data-editsoal="${i}">✏️ Edit</button>
+        <button class="btn ghost tiny" data-delsoal="${i}">🗑️</button>
+      </div>
+    </div>
+    <p style="font-weight:800;margin:8px 0 4px;font-size:.95rem">${esc(x.tanya)}</p>
+    <ol class="small" style="margin:0;padding-left:20px">
+      ${x.pilihan.map((p,j)=>`<li style="color:${j===x.jawab?'#1F8A46':'inherit'};font-weight:${j===x.jawab?'800':'400'}">${esc(p)} ${j===x.jawab?'✔':''}</li>`).join('')}
+    </ol>
+    <div class="small muted mt-s"><b>Pembahasan:</b> ${esc(x.penjelasan)}</div>
+  </div>`;
+}
+
+function formSoal(idx){
+  const isBaru = idx === null;
+  const x = isBaru ? {id:uid('q'), sistem:'napas', tipe:'pg', tanya:'', pilihan:['','','',''], jawab:0, penjelasan:''} : DB.data.kuis[idx];
+  const opsiOpt = x.pilihan.map((p,j)=>`<option value="${j}" ${j===x.jawab?'selected':''}>${String.fromCharCode(65+j)}</option>`).join('');
+  const body = `
+    <div class="field"><label class="fl">Bab</label>
+      <select id="fSistem">${Object.keys(DB.data.sistem).map(k=>`<option value="${k}" ${k===x.sistem?'selected':''}>${esc(DB.data.sistem[k].nama)}</option>`).join('')}</select></div>
+    <div class="field"><label class="fl">Jenis soal</label>
+      <select id="fTipe"><option value="pg" ${x.tipe==='pg'?'selected':''}>Pilihan ganda</option><option value="tf" ${x.tipe==='tf'?'selected':''}>Benar / Salah</option></select></div>
+    <div class="field"><label class="fl">Pertanyaan</label><textarea id="fTanya" style="min-height:70px">${esc(x.tanya)}</textarea></div>
+    <div class="field"><label class="fl">Pilihan jawaban (isi minimal 2)</label>
+      ${[0,1,2,3].map(j=>`<input type="text" class="fPil" data-j="${j}" style="margin-bottom:6px" placeholder="Pilihan ${String.fromCharCode(65+j)}" value="${esc(x.pilihan[j]||'')}">`).join('')}
+    </div>
+    <div class="field"><label class="fl">Jawaban benar</label><select id="fJawab">${opsiOpt}</select></div>
+    <div class="field"><label class="fl">Pembahasan</label><textarea id="fPenjelasan" style="min-height:60px">${esc(x.penjelasan)}</textarea></div>
+    <div class="hint">Untuk soal Benar/Salah, cukup isi dua pilihan: "Benar" dan "Salah".</div>`;
+  modal({em: isBaru?'➕':'✏️', title: isBaru?'Tambah Soal':'Edit Soal', body, actions:[
+    {label:'Batal', kind:'ghost'},
+    {label:'Simpan Soal', kind:'green', fn: ()=>{
+      const pil = $$('.fPil').map(i=>i.value.trim()).filter(Boolean);
+      const tanya = $('#fTanya').value.trim();
+      const penj = $('#fPenjelasan').value.trim();
+      if(!tanya){ toast('Pertanyaan tidak boleh kosong.','err'); return false; }
+      if(pil.length < 2){ toast('Isi minimal dua pilihan jawaban.','err'); return false; }
+      let jawab = Number($('#fJawab').value);
+      if(jawab >= pil.length) jawab = 0;
+      const obj = { id:x.id, sistem:$('#fSistem').value, tipe:$('#fTipe').value, tanya, pilihan:pil, jawab, penjelasan:penj || 'Jawaban yang benar: ' + pil[jawab] };
+      if(isBaru) DB.data.kuis.push(obj); else DB.data.kuis[idx] = obj;
+      DB.save(); Sfx.ok(); toast(isBaru?'Soal ditambahkan.':'Soal diperbarui.','ok'); renderGuru();
+    }}
+  ]});
+  // Interaksi: menyesuaikan opsi jawaban benar saat pilihan diketik
+  setTimeout(()=>{
+    const sel = $('#fJawab'); if(!sel) return;
+    const sync = ()=> sel.innerHTML = $$('.fPil').filter(i=>i.value.trim()).map((i)=>{
+      const j = Number(i.dataset.j); return `<option value="${j}">${String.fromCharCode(65+j)} — ${esc(i.value.trim())}</option>`;
+    }).join('');
+    sync();
+    $$('.fPil').forEach(i=> i.addEventListener('input', sync));
+    $('#fTipe').addEventListener('change', e=>{
+      if(e.target.value==='tf'){ $$('.fPil')[0].value='Benar'; $$('.fPil')[1].value='Salah'; sync(); }
+    });
+  }, 60);
+}
+
+/* --- Berbagi --- */
+function gBerbagi(){
+  const sh = DB.data.share;
+  const base = location.href.split('#')[0];
+  const pakaiFile = location.protocol === 'file:';
+  const link = base + '?kelas=' + encodeURIComponent(sh.kelas||DB.data.meta.kelas) + '&bab=' + sh.aktif.join(',') + '&kode=' + encodeURIComponent(sh.kode||'');
+  return `<div class="card">
+    <h3>🔗 Bagikan ke Siswa</h3>
+    <p class="small muted">Tautan di bawah membuka aplikasi ini dengan kelas &amp; bab yang sudah dipilih. Bagikan lewat WhatsApp, Google Classroom, atau LMS sekolah.</p>
+    ${pakaiFile ? `<div class="note pink" style="margin-bottom:12px">Aplikasi sedang dibuka dari berkas lokal (<code>file://</code>). Agar tautan bisa dibuka siswa, unggah folder ini ke hosting statis (misalnya Google Drive publik, Netlify, Vercel, atau GitHub Pages), lalu bagikan tautan dari alamat web tersebut.</div>` : ''}
+    <div class="grid">
+      <div class="field"><label class="fl">Kode kelas</label><input type="text" data-share="kode" value="${esc(sh.kode||'')}" maxlength="40"></div>
+      <div class="field"><label class="fl">Label kelas</label><input type="text" data-share="kelas" value="${esc(sh.kelas||'')}" maxlength="20"></div>
+    </div>
+    <div class="field"><label class="fl">Pesan untuk siswa</label><input type="text" data-share="pesan" value="${esc(sh.pesan||'')}" maxlength="160"></div>
+    <div class="field"><label class="fl">Bab yang ditampilkan di beranda</label>
+      <div class="row">
+        ${Object.keys(DB.data.sistem).map(k=>`<label class="chip ${COLORS[k].chip}" style="cursor:pointer;gap:8px">
+          <input type="checkbox" data-sharebab="${k}" ${sh.aktif.includes(k)?'checked':''}> ${esc(DB.data.sistem[k].nama)}
+        </label>`).join('')}
+      </div>
+      <div class="hint">Jika tidak ada yang dicentang, semua bab ditampilkan.</div>
+    </div>
+    <div class="field"><label class="fl">Tautan yang dihasilkan</label>
+      <input type="text" id="shareLink" value="${esc(link)}" readonly>
+    </div>
+    <div class="row">
+      <button class="btn green" id="copyLink">📋 Salin Tautan</button>
+      <button class="btn blue" id="waLink">💬 Kirim via WhatsApp</button>
+      <button class="btn ghost" id="openLink">🔎 Buka Tautan</button>
+      <button class="btn ghost" data-guru-save="berbagi">💾 Simpan Pengaturan</button>
+    </div>
+    <div class="divider"></div>
+    <h4>📲 Kode kelas</h4>
+    <p class="small muted" style="margin:0">Tampilkan kode ini di papan tulis agar siswa tahu arahan:</p>
+    <div class="chip purple" style="font-size:1rem;padding:10px 18px;margin-top:6px">${esc(sh.kode||'-')} · ${esc(sh.pesan||'')}</div>
+  </div>
+
+  <div class="card mt">
+    <h3>🖨️ Ringkasan untuk Orang Tua</h3>
+    <p class="small muted">Cetak atau unduh ringkasan progres siswa yang sedang aktif di perangkat ini.</p>
+    <div class="row">
+      <button class="btn blue sm" id="gUnduh">⬇️ Unduh Ringkasan</button>
+      <button class="btn ghost sm" id="gCetak">🖨️ Cetak Halaman</button>
+    </div>
+  </div>`;
+}
+
+/* --- Keamanan & Data --- */
+function gKeamanan(){
+  return `<div class="card">
+    <h3>🔐 Sandi Guru</h3>
+    <p class="small muted">Sandi hanya disimpan sebagai hash di browser ini. Ini pembatas sederhana, bukan keamanan server. Jangan gunakan sandi penting.</p>
+    <div class="grid">
+      <div class="field"><label class="fl">Sandi lama</label><input type="password" id="pwLama" placeholder="Sandi saat ini"></div>
+      <div class="field"><label class="fl">Sandi baru (min. 4 karakter)</label><input type="password" id="pwBaru" placeholder="Sandi baru"></div>
+      <div class="field"><label class="fl">Ulangi sandi baru</label><input type="password" id="pwUlang" placeholder="Ulangi sandi baru"></div>
+    </div>
+    <button class="btn purple" id="simpanPw">🔐 Ganti Sandi</button>
+    <div class="note blue mt-s">Lupa sandi? Reset seluruh data lewat tombol "Reset Data Pabrik" di bawah. Sandi kembali menjadi <b>guru123</b>.</div>
+  </div>
+
+  <div class="card mt">
+    <h3>💾 Cadangkan &amp; Pulihkan Data</h3>
+    <p class="small muted">Data konten (identitas, materi, soal) dan progres siswa tersimpan di localStorage browser. Unduh cadangan agar aman saat berganti komputer.</p>
+    <div class="row">
+      <button class="btn green sm" id="eksporData">⬇️ Unduh Cadangan (JSON)</button>
+      <button class="btn blue sm" id="imporData">⬆️ Muat dari Berkas</button>
+      <input type="file" id="imporFile" accept="application/json,.json" class="hide">
+      <button class="btn ghost sm" id="resetData">♻️ Reset Data Pabrik</button>
+    </div>
+    <div class="divider"></div>
+    <h4>📊 Ukuran &amp; isi data</h4>
+    <div class="kv"><span>Materi</span><b>${Object.keys(DB.data.sistem).length} bab · ${Object.values(DB.data.sistem).reduce((a,s)=>a+s.organ.length,0)} organ</b></div>
+    <div class="kv"><span>Bank soal</span><b>${DB.data.kuis.length} soal</b></div>
+    <div class="kv"><span>Aktivitas</span><b>${DB.data.aktivitas.length} kegiatan</b></div>
+    <div class="kv"><span>Perkiraan ukuran data</span><b>${(JSON.stringify(DB.data).length/1024).toFixed(1)} KB</b></div>
+    <div class="kv"><span>Penyimpanan browser</span><b>${Store.bisa?'tersedia ✅':'diblokir ⚠️'}</b></div>
+  </div>
+
+  <div class="card mt" style="background:#FFF8E1">
+    <h3>ℹ️ Catatan Implementasi</h3>
+    <ul class="clean small" style="--dotc:var(--orange)">
+      <li>Semua tombol navigasi, akordeon organ, kuis (dengan penilaian otomatis), penghitung napas/nadi, timer, lencana, dan unduh ringkasan <b>berfungsi</b> di browser.</li>
+      <li>Tidak ada server: data tidak terkirim ke mana pun. Karena itu, hasil belajar tiap siswa tidak dapat dilihat dari perangkat guru secara otomatis.</li>
+      <li>Fitur "Berbagi" hanya membuat tautan; aplikasi tidak memiliki login siswa atau basis data kelas daring.</li>
+      <li>Unduhan ringkasan memakai format teks (.txt) agar bisa dibuka di perangkat mana pun.</li>
+    </ul>
+  </div>`;
+}
+
+/* --- Binding aksi dashboard --- */
+function bindGuru(){
+  $$('[data-gtab]').forEach(b=> b.onclick = ()=>{ UI.tabGuru = b.dataset.gtab; Sfx.click(); renderGuru(); });
+  $$('[data-gsistem]').forEach(b=> b.onclick = ()=>{ G.tabSistem = b.dataset.gsistem; Sfx.click(); renderGuru(); });
+  $$('[data-qfilter]').forEach(b=> b.onclick = ()=>{ G.kuisFilter = b.dataset.qfilter; Sfx.click(); renderGuru(); });
+
+  $$('[data-guru-save]').forEach(b=> b.onclick = ()=> simpanGuru(b.dataset.guruSave));
+
+  // Materi
+  const addO = $('#addOrgan');
+  if(addO) addO.onclick = ()=>{
+    simpanMateriDariForm(true); // simpan dulu isi yang ada
+    DB.data.sistem[G.tabSistem].organ.push({nama:'Organ baru', fungsi:'Tulis fungsi organ di sini.'});
+    DB.save(); renderGuru(); toast('Organ ditambahkan. Lengkapi namanya.','ok');
+  };
+  $$('[data-delorgan]').forEach(b=> b.onclick = ()=>{
+    const i = Number(b.dataset.delorgan);
+    konfirmasi('Hapus organ ini?', 'Data organ akan dihapus dari bab ' + DB.data.sistem[G.tabSistem].nama + '.', ()=>{
+      DB.data.sistem[G.tabSistem].organ.splice(i,1); DB.save(); renderGuru(); toast('Organ dihapus.','ok');
+    });
+  });
+
+  // Aktivitas
+  const addA = $('#addAkt');
+  if(addA) addA.onclick = ()=>{
+    simpanAktivitasDariForm();
+    DB.data.aktivitas.push({judul:'Kegiatan baru', emoji:'🔬', langkah:'Tulis langkah kegiatan.', alat:'-'});
+    DB.save(); renderGuru(); toast('Kegiatan ditambahkan.','ok');
+  };
+  $$('[data-delakt]').forEach(b=> b.onclick = ()=>{
+    const i = Number(b.dataset.delakt);
+    konfirmasi('Hapus kegiatan ini?', 'Kegiatan akan dihapus dari daftar.', ()=>{
+      simpanAktivitasDariForm(); DB.data.aktivitas.splice(i,1); DB.save(); renderGuru(); toast('Kegiatan dihapus.','ok');
+    });
+  });
+
+  // Soal
+  const addS = $('#addSoal'); if(addS) addS.onclick = ()=> formSoal(null);
+  $$('[data-editsoal]').forEach(b=> b.onclick = ()=> formSoal(Number(b.dataset.editsoal)));
+  $$('[data-delsoal]').forEach(b=> b.onclick = ()=>{
+    const i = Number(b.dataset.delsoal);
+    konfirmasi('Hapus soal ini?', 'Soal akan hilang dari bank soal dan kuis siswa.', ()=>{
+      DB.data.kuis.splice(i,1); DB.save(); renderGuru(); toast('Soal dihapus.','ok');
+    });
+  });
+
+  // Tujuan contoh
+  const tc = $('#tujuanContoh'); if(tc) tc.onclick = ()=>{
+    $('#tujuanTA').value = DEFAULT_DATA.tujuan.join('\n'); toast('Contoh dimuat. Klik Simpan Tujuan untuk menerapkan.','ok');
+  };
+
+  // Berbagi
+  const cp = $('#copyLink'); if(cp) cp.onclick = async ()=>{
+    const v = $('#shareLink').value;
+    try{ await navigator.clipboard.writeText(v); toast('Tautan disalin.','ok'); }
+    catch(e){
+      $('#shareLink').select(); document.execCommand && document.execCommand('copy');
+      toast('Tautan dipilih — tekan Ctrl/Cmd+C untuk menyalin.','ok');
+    }
+  };
+  const wa = $('#waLink'); if(wa) wa.onclick = ()=>{
+    const v = $('#shareLink').value;
+    const pesan = (DB.data.share.pesan||'Ayo belajar!') + '\n' + v;
+    window.open('https://wa.me/?text=' + encodeURIComponent(pesan), '_blank', 'noopener');
+  };
+  const ol = $('#openLink'); if(ol) ol.onclick = ()=>{ window.open($('#shareLink').value, '_blank', 'noopener'); };
+  const gu = $('#gUnduh'); if(gu) gu.onclick = unduhRingkasan;
+  const gc = $('#gCetak'); if(gc) gc.onclick = ()=> window.print();
+
+  // Keamanan
+  const sp = $('#simpanPw'); if(sp) sp.onclick = ()=>{
+    const lama = $('#pwLama').value, baru = $('#pwBaru').value, ulang = $('#pwUlang').value;
+    if(hash(lama) !== DB.data.sandiHash){ toast('Sandi lama salah.','err'); return; }
+    if(baru.length < 4){ toast('Sandi baru minimal 4 karakter.','err'); return; }
+    if(baru !== ulang){ toast('Ulangi sandi tidak sama.','err'); return; }
+    DB.data.sandiHash = hash(baru); DB.data.sandiHint = 'Sandi sudah diganti oleh guru.'; DB.save();
+    toast('Sandi guru berhasil diganti.','ok'); renderGuru();
+  };
+  const eks = $('#eksporData'); if(eks) eks.onclick = ()=>{
+    const paket = { versi:1, dibuat:nowISO(), data:DB.data, progres:Progress.d };
+    const blob = new Blob([JSON.stringify(paket,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'cadangan-ruang-belajar-ceria-' + new Date().toISOString().slice(0,10) + '.json';
+    a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+    toast('Cadangan diunduh.','ok');
+  };
+  const imp = $('#imporData'), file = $('#imporFile');
+  if(imp && file){
+    imp.onclick = ()=> file.click();
+    file.onchange = ()=>{
+      const f = file.files[0]; if(!f) return;
+      const rd = new FileReader();
+      rd.onload = ()=>{
+        try{
+          const obj = JSON.parse(rd.result);
+          if(!obj || !obj.data || !obj.data.meta) throw new Error('format');
+          konfirmasi('Muat data cadangan ini?', 'Konten saat ini akan diganti. Progres siswa di berkas juga akan dimuat bila ada.', ()=>{
+            DB.data = deepMerge(clone(DEFAULT_DATA), obj.data);
+            if(!DB.data.kuis || !DB.data.kuis.length) DB.data.kuis = clone(BANK_SOAL);
+            DB.save();
+            if(obj.progres){ Progress.d = Object.assign(Progress.d, obj.progres); Progress.save(); }
+            toast('Data berhasil dimuat.','ok'); renderGuru(); renderNav();
+          });
+        }catch(e){ toast('Berkas tidak valid. Pastikan JSON cadangan dari aplikasi ini.','err'); }
+        file.value = '';
+      };
+      rd.readAsText(f);
+    };
+  }
+  const rd2 = $('#resetData'); if(rd2) rd2.onclick = ()=>{
+    konfirmasi('Reset ke data pabrik?', 'Seluruh materi, soal, pengaturan, dan progres akan dikembalikan ke bawaan.', ()=>{
+      DB.reset(false); Progress.load(); Progress.save(); UI.guruMasuk = false; Sesi.del('rbc:guru');
+      toast('Data dikembalikan ke bawaan.','ok'); renderGuru(); renderNav();
+    }, 'Ya, reset');
+  };
+}
+
+/* --- Simpan per tab --- */
+function simpanGuru(tab){
+  if(tab === 'identitas'){
+    $$('[data-meta]').forEach(el=> DB.data.meta[el.dataset.meta] = el.value.trim());
+    DB.save(); Sfx.ok(); toast('Identitas disimpan.','ok'); renderGuru(); renderNav();
+  }
+  if(tab === 'tujuan'){
+    const arr = $('#tujuanTA').value.split('\n').map(x=>x.trim()).filter(Boolean);
+    if(!arr.length){ toast('Isi minimal satu tujuan.','err'); return; }
+    DB.data.tujuan = arr; DB.save(); Sfx.ok(); toast('Tujuan pembelajaran disimpan.','ok'); renderGuru();
+  }
+  if(tab === 'materi'){ simpanMateriDariForm(false); }
+  if(tab === 'keterkaitan'){
+    DB.data.keterkaitan = { judul:$('#kJudul').value.trim(), paragraf:$('#kParagraf').value.trim(), contoh:$('#kContoh').value.trim() };
+    DB.save(); Sfx.ok(); toast('Keterkaitan antar sistem disimpan.','ok'); renderGuru();
+  }
+  if(tab === 'aktivitas'){
+    simpanAktivitasDariForm(); DB.save(); Sfx.ok(); toast('Aktivitas disimpan.','ok'); renderGuru();
+  }
+  if(tab === 'berbagi'){
+    $$('[data-share]').forEach(el=> DB.data.share[el.dataset.share] = el.value.trim());
+    const aktif = $$('[data-sharebab]').filter(c=>c.checked).map(c=>c.dataset.sharebab);
+    DB.data.share.aktif = aktif;
+    DB.save(); Sfx.ok(); toast('Pengaturan berbagi disimpan.','ok'); renderGuru();
+  }
+}
+
+function simpanMateriDariForm(silent){
+  const k = G.tabSistem, s = Object.assign({}, DB.data.sistem[k]);
+  s.nama = $('#mNama').value.trim() || s.nama;
+  s.emoji = $('#mEmoji').value.trim() || s.emoji;
+  s.fungsi = $('#mFungsi').value.trim();
+  s.organ = $$('#organEditor [data-organrow]').map(row=>({
+    nama: $('.oNama', row).value.trim() || 'Organ',
+    fungsi: $('.oFungsi', row).value.trim()
+  }));
+  s.proses = $('#mProses').value.split('\n').map(x=>x.trim()).filter(Boolean);
+  s.gangguan = $('#mGangguan').value.split(',').map(x=>x.trim()).filter(Boolean);
+  s.jaga = $('#mJaga').value.split(',').map(x=>x.trim()).filter(Boolean);
+  s.fakta = $('#mFakta').value.trim();
+  DB.data.sistem[k] = s;
+  DB.save();
+  if(!silent){ Sfx.ok(); toast('Bab "' + s.nama + '" disimpan.','ok'); renderGuru(); }
+}
+
+function simpanAktivitasDariForm(){
+  const rows = $$('#aktEditor [data-aktrow]');
+  if(!rows.length) return;
+  DB.data.aktivitas = rows.map(r=>({
+    judul: $('.aJudul', r).value.trim() || 'Kegiatan',
+    emoji: $('.aEmoji', r).value.trim() || '🔬',
+    langkah: $('.aLangkah', r).value.trim(),
+    alat: $('.aAlat', r).value.trim()
+  }));
+  DB.save();
+}
+
+/* ---------------------- 14. EVENT GLOBAL ---------------------- */
+document.addEventListener('click', e=>{
+  const goBtn = e.target.closest('[data-go]');
+  if(goBtn){ e.preventDefault(); Sfx.click(); go(goBtn.dataset.go, {bab: goBtn.dataset.bab}); return; }
+  const babTab = e.target.closest('[data-babtab]');
+  if(babTab){ Sfx.click(); UI.babAktif = babTab.dataset.babtab; renderMateri(); return; }
+});
+
+$('#whoBox').onclick = ()=>{
+  modal({em:'🧒', title:'Siapa namamu?', body:`<div class="field"><label class="fl">Nama siswa</label>
+    <input type="text" id="namaOnboard" value="${esc(Progress.d.siswa||'')}" placeholder="Contoh: Nadia" maxlength="40"></div>
+    <div class="hint">Nama disimpan di perangkat ini saja untuk menyapa dan mengisi ringkasan hasil belajar.</div>`,
+    actions:[
+      {label:'Batal', kind:'ghost'},
+      {label:'Simpan', kind:'green', fn: ()=>{
+        const v = $('#namaOnboard').value.trim();
+        Progress.d.siswa = v; Progress.save(); renderNav();
+        toast(v?'Halo, '+v+'! Selamat belajar 🎉':'Nama dikosongkan.','ok');
+        if(UI.screen==='home') renderHome(); if(UI.screen==='progres') renderProgres();
+      }}
+    ]});
+};
+
+$('#fabSound').onclick = function(){
+  Sfx.on = !Sfx.on;
+  this.textContent = Sfx.on ? '🔔' : '🔕';
+  this.title = 'Suara efek: ' + (Sfx.on ? 'nyala' : 'mati');
+  if(Sfx.on) Sfx.click();
+};
+
+$('#homeShareBtn').onclick = ()=>{
+  UI.guruMasuk ? (UI.tabGuru='berbagi', go('guru')) : go('guru');
+  if(!UI.guruMasuk) toast('Masukkan sandi guru untuk membuka pengaturan berbagi.','');
+};
+
+/* Gerbang sandi guru */
+$('#gateBtn').onclick = masukGuru;
+$('#gatePass').addEventListener('keydown', e=>{ if(e.key==='Enter') masukGuru(); });
+function masukGuru(){
+  const v = $('#gatePass').value;
+  if(hash(v) === DB.data.sandiHash){
+    UI.guruMasuk = true; Sesi.set('rbc:guru','1');
+    $('#gatePass').value = ''; $('#gateMsg').textContent = '';
+    Sfx.ok(); toast('Selamat datang, Guru! 👋','ok'); renderGuru();
+  } else {
+    $('#gateMsg').textContent = 'Sandi salah. Coba lagi.';
+    Sfx.no(); toast('Sandi salah.','err');
+  }
+}
+
+/* ---------------------- 15. INIT ---------------------- */
+function terapkanParamURL(){
+  const p = new URLSearchParams(location.search);
+  if(p.get('bab')){
+    const daftar = p.get('bab').split(',').map(s=>s.trim()).filter(k=>DB.data.sistem[k]);
+    if(daftar.length){
+      DB.data.share.aktif = daftar;
+      UI.babAktif = daftar[0];
+    }
+  }
+  if(p.get('kode')) DB.data.share.kode = p.get('kode');
+  if(p.get('kelas')) DB.data.share.kelas = p.get('kelas');
+  if(p.get('nama')){ Progress.d.siswa = p.get('nama'); Progress.save(); }
+  if(p.get('materi')) DB.data.meta.materi = p.get('materi');
+}
+
+function init(){
+  if(!Store.bisa) $('#storageWarn').classList.remove('hide');
+  DB.load();
+  Progress.load();
+  terapkanParamURL();
+  renderNav();
+
+  const awal = (location.hash||'').replace('#','');
+  go(TABS.some(t=>t.id===awal) ? awal : 'home');
+
+  // Pintasan papan tulis: Shift+G membuka dashboard guru
+  document.addEventListener('keydown', e=>{
+    if(e.shiftKey && (e.key==='G' || e.key==='g')){ if(e.target.tagName!=='INPUT' && e.target.tagName!=='TEXTAREA'){ go('guru'); } }
+  });
+
+  // Sapa siswa baru (hanya sekali per perangkat, bisa dilewati)
+  const sudahSapa = Store.get('rbc:pernah', false);
+  if(!Progress.d.siswa && !sudahSapa){
+    Store.set('rbc:pernah', true);
+    setTimeout(()=>{
+      modal({em:'👋', title:'Selamat datang di Ruang Belajar Ceria!',
+        body:`<p class="small">Halo! Sebelum mulai, boleh tahu namamu?</p>
+          <div class="field"><input type="text" id="namaAwal" placeholder="Tulis namamu (opsional)" maxlength="40"></div>
+          <p class="hint">Nama hanya disimpan di perangkat ini. Kamu bisa mengubahnya nanti lewat tombol profil di kanan atas.</p>`,
+        actions:[
+          {label:'Nanti saja', kind:'ghost'},
+          {label:'Mulai belajar', kind:'green', fn: ()=>{
+            const v = ($('#namaAwal')?.value||'').trim();
+            if(v){ Progress.d.siswa = v; Progress.save(); renderNav(); renderHome(); toast('Halo, '+v+'! 🎉','ok'); }
+            go('materi');
+          }}
+        ]});
+      const inp = $('#namaAwal'); if(inp) inp.focus();
+    }, 700);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+if(document.readyState !== 'loading') { /* DOMContentLoaded mungkin sudah lewat */ }
+
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5d0ed298cbfab53',t:'MTc5NTEwOTI1NA=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5d0ed298cbfab53',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
